@@ -36,13 +36,18 @@ let doComplexConditionalWork = (flag, obj) => {
 
 }
 
+let doWorkWithObject = (obj) => {
+	return processObject(obj);
+}
+
 let processStats = (stats) => {
 
 	if (stats == null) {
-		return;
+		console.log('Failed! No work stats from object');
+		return null;
 	}
 
-	return success = processStats(stats);
+	return processStats(stats);
 }
 
 let processResultFromStats = (success) => {
