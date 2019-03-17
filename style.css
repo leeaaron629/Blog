@@ -1,11 +1,13 @@
 body {
 	/* Color Scheme */
-	--body-background-color: #222222;
 	--dark-brownish-orange: #E27D60;
 	--light-blueish-green: #85DCB0;
 	--light-mellow-orange: #E8A87C;
 	--dark-maroonish-red: #C38D9E;
 	--dark-bluish-teal: #41B3A3;
+
+	/* Actual Color */
+	--body-background-color: #222222;
 
 	background-color: var(--body-background-color);
 	line-height: 1.5em;

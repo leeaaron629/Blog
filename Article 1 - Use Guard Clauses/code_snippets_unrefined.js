@@ -146,14 +146,12 @@ var functionWithBreakBlock = (flag, obj) => {
 	itself. So, at the end of the day you're disguising the complexity itself.
 */
 
-var functionWithDeepNesting = (flag, obj) => {
+var functionWithDeepNesting = (flag, objectName) => {
 
 	if (flag == true) {
-
+		obj = dependency.getObjectForWork(objectName);
 		if (obj != null) {
-
 			var stats = doWorkWithObject(obj);
-
 			if (stats != null) {
 
 				var success = processStats(stats);
@@ -168,18 +166,48 @@ var functionWithDeepNesting = (flag, obj) => {
 			} else {
 				console.log('Failed! No work stats from object');
 			}
-
 		}
-
 	}
 
 	doUnrelatedWork();
+}
 
+var functionWithDeepNestingRefactored = (flag, objectName) => {
+
+	let obj = null;
+
+	if (flag == true) {
+		obj = dependency.getObjectForWork(objectName);
+	}
+
+	let stats = null;
+
+	if (obj != null) {
+		stats = doWorkWithObject(obj);
+	}
+
+	let success = false;
+
+	if (stats != null) {
+		success = processStats(stats);
+	} else {
+		console.log('Filed! No Work stats from object');
+	}
+
+	if (success) {
+		console.log('Work stats persisted in database successfully');
+	} else {
+		console.log('Work stats not persisted in database, defaulting to log file');
+		writeStatsToFile(stats);
+	}
+
+	doUnrelatedWork();
 }
 
 var functionThatDoesUnrelatedWork = (flag, obj) => {
 
 	if (flag == true) {
+		obj = dependency.getObjectForWork();
 		firstLevelNestingWork(obj);
 	}
 

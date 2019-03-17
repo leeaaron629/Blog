@@ -1,27 +1,28 @@
 let primaryFunction = (flag, obj) => {
 	
-	doComplexConditionalWork(flag, obj);
+	doComplexConditionalWork(flag, objectName);
 	doUnrelatedWork();
 
 }
 
-let doComplexConditionalWork = (flag, obj) => {
+let doComplexConditionalWork = (flag, objectName) => {
 
 	if (flag == false) {
 		return;
 	}
 
-	if (obj == null) {
-		return;
-	}
-
+	let obj = dependency.getObjectForWork(objectName);
 	let stats = doWorkWithObject(obj);
 	let success = processStats(stats);
 	processResultFromStats(success);
-
 }
 
 let doWorkWithObject = (obj) => {
+
+	if (object == null) {
+		return;
+	}
+
 	return processObject(obj);
 }
 

@@ -14,6 +14,41 @@
     <div class="main-content">
         <h1>Use Guard Clauses</h1>
         <br/>
+        <p>
+			In our programming career, we encounter
+			very deep nested code. These code can look complex, but
+			sometimes all they need is some re-organization and
+			re-structuring. Here I will go over a technique I use 
+			frequently to address deep nesting, but first let's go 
+			over an example of what deep nesting is:
+        </p>
+        <pre><code class="language-javascript">
+var functionWithDeepNesting = (flag, objectName) => {
+
+	if (flag == true) {
+		obj = dependency.getObjectForWork(objectName);
+		if (obj != null) {
+			var stats = doWorkWithObject(obj);
+			if (stats != null) {
+
+				var success = processStats(stats);
+
+				if (success) {
+					console.log('Work stats persisted in database successfully');
+				} else {
+					console.log('Work stats not persisted in database, defaulting to log file');
+					writeStatsToFile(stats);
+				}
+
+			} else {
+				console.log('Failed! No work stats from object');
+			}
+		}
+	}
+
+	doUnrelatedWork();
+}
+        </code></pre>
         <pre><code class="language-javascript">
 function printNextNode(node) {
 
