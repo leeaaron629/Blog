@@ -12,6 +12,7 @@ body {
 }
 
 pre {
+	font-size: 10px;
 	border-radius: 7px;
 	height: 400px;
 	overflow-y: scroll;
