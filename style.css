@@ -1,0 +1,34 @@
+body {
+	/* Color Scheme */
+	--dark-brownish-orange: #E27D60;
+	--light-blueish-green: #85DCB0;
+	--light-mellow-orange: #E8A87C;
+	--dark-maroonish-red: #C38D9E;
+	--dark-bluish-teal: #41B3A3;
+
+	background-color: var(--dark-maroonish-red);
+	line-height: 1.5em;
+	font-family: 'Montserrat', sans-serif;
+}
+
+pre {
+	border-radius: 7px;
+	height: 400px;
+	overflow-y: scroll;
+}
+
+.main-content {
+	max-width: 768px;
+	bottom: 10px;
+	
+	background-color: var(--light-mellow-orange);
+
+	margin: 30px auto 30px auto;
+	padding: 20px 30px 20px 30px;
+
+	border-radius: 8px;
+}
+
+.main-content h2 {
+	text-align: center;
+}
