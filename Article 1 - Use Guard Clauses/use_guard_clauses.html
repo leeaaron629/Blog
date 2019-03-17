@@ -1,10 +1,94 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Use Guard Clauses</title>
-	</head>
 
-	<body>
-		
-	</body>
+<head>
+    <title>Use Guard Clauses</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../prism.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="../prism.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-abap.min.js"></script>
+</head>
+
+<body>
+    <div class="main-content">
+        <h2>Use Guard Clauses</h2>
+        <br/>
+        <pre><code class="language-javascript">
+function printNextNode(node) {
+
+	if (node != null) {
+		console.log(node.val);
+		printNextNode(node.next);
+	}
+
+	// Node is null, but is there code further below?
+
+}
+
+function printNextNode(node) {
+
+	if (node == null) {
+		return;
+	}
+
+	// Let's not look further if node is null
+
+	console.log(node.val);
+	printNextNode(node.next);
+	
+}
+		</code></pre>
+        <p>
+            As you can see the second function is much easier to
+            read and comprehend for two primary reason: <br />
+            <br />
+            1. The primary logic is not nested at all <br />
+            2. You do not have to look further than the return statement <br />
+            <br />
+            In this example the logic is very short and simple, but
+            if you imagine more sophisticated examples, you would have to
+            deal with 1+ nesting and scrolling further down to see if there's
+            additional logic.
+        </p>
+        <pre><code class="language-javascript">
+var functionWithDeepNestedConditions = (flag, obj) => {
+
+	if (flag == true) {
+		if (obj != null) {
+			doWorkWithObject(obj):
+		}
+	}
+
+	doUnrelatedWork();
+}
+
+var functionThatWontWorkWithGuardClauses = (flag, obj) => {
+
+	if (flag == false) {
+		return;
+	}
+
+	if (object == null) {
+		return;
+	}
+
+	doWorkWithObject(obj);
+	doUnrelatedWork();
+}
+		</code></pre>
+        <p>
+            However, there's a caveat with using guard clauses. The two
+            functions above are not equivalent. If flag is false,
+            Function #1 will perform doUnrelatedWork(), while Function #2
+            will simply return out of the statement. Ideally, doUnrelatedWork()
+            should not be inside the function and should be in the calling function.
+            So to use guard clauses, you would have to decompose large functions into
+            smaller ones.
+        </p>
+        <p>
+        </p>
+    </div>
+</body>
+
 </html>
