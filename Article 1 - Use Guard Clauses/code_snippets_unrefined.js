@@ -172,38 +172,6 @@ var functionWithDeepNesting = (flag, objectName) => {
 	doUnrelatedWork();
 }
 
-var functionWithDeepNestingRefactored = (flag, objectName) => {
-
-	let obj = null;
-
-	if (flag == true) {
-		obj = dependency.getObjectForWork(objectName);
-	}
-
-	let stats = null;
-
-	if (obj != null) {
-		stats = doWorkWithObject(obj);
-	}
-
-	let success = false;
-
-	if (stats != null) {
-		success = processStats(stats);
-	} else {
-		console.log('Filed! No Work stats from object');
-	}
-
-	if (success) {
-		console.log('Work stats persisted in database successfully');
-	} else {
-		console.log('Work stats not persisted in database, defaulting to log file');
-		writeStatsToFile(stats);
-	}
-
-	doUnrelatedWork();
-}
-
 var functionThatDoesUnrelatedWork = (flag, obj) => {
 
 	if (flag == true) {

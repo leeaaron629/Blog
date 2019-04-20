@@ -5,9 +5,10 @@ body {
 	--light-mellow-orange: #E8A87C;
 	--dark-maroonish-red: #C38D9E;
 	--dark-bluish-teal: #41B3A3;
+	--not-so-white: #EEEEEE;
 
 	/* Actual Color */
-	--body-background-color: #222222;
+	--body-background-color: var(--not-so-white);
 
 	background-color: var(--body-background-color);
 	line-height: 1.5em;
@@ -24,7 +25,9 @@ pre {
 	max-width: 768px;
 	bottom: 10px;
 	
-	background-color: var(--light-mellow-orange);
+	background-color: var(--not-so-white);
+
+	letter-spacing: .01em;
 
 	margin: 30px auto 30px auto;
 	padding: 20px 30px 20px 30px;

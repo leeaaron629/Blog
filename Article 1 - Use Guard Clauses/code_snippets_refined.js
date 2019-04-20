@@ -2,7 +2,6 @@ let primaryFunction = (flag, obj) => {
 	
 	doComplexConditionalWork(flag, objectName);
 	doUnrelatedWork();
-
 }
 
 let doComplexConditionalWork = (flag, objectName) => {
@@ -23,7 +22,9 @@ let doWorkWithObject = (obj) => {
 		return;
 	}
 
-	return processObject(obj);
+	// TODO - processObject logic here
+
+	return obj;
 }
 
 let processStats = (stats) => {
@@ -33,7 +34,9 @@ let processStats = (stats) => {
 		return null;
 	}
 
-	return processStats(stats);
+	// TODO - processStats logic here
+
+	return stats;
 }
 
 let processResultFromStats = (success) => {
@@ -44,5 +47,4 @@ let processResultFromStats = (success) => {
 		console.log('Work stats not persisted in database, defaulting to log file');
 		writeStatsToFile(stats);
 	}
-
 }
