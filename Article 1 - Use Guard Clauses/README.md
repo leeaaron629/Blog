@@ -1,5 +1,9 @@
 # Dealing with Deep Nested Code
 
+Deep nesting in code is one of the scariest things to see in your codebase. 
+
+Applications, and especially enterprise applications, are often littered with deep nested code structures. They are complex and hard to digest.
+
 Throughout our programming career, we will encounter
 complex conditional business logic and it may appear to be 
 no other way but to write a bunch of nested if-else 
