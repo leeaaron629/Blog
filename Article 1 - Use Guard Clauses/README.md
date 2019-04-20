@@ -117,13 +117,13 @@ const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 }
 ```
 
-    However, there's a caveat with using guard clauses. The two
-    functions above are not equivalent. If flag is false,
-    Function #1 will perform doUnrelatedWork(), while Function #2
-    will simply return out of the statement. Ideally, doUnrelatedWork()
-    should not be inside the function and should be in the calling function.
-    So to use guard clauses, you would have to decompose large functions into
-    smaller ones.
+However, there's a caveat with using guard clauses. The two
+functions above are not equivalent. If flag is false,
+Function #1 will perform doUnrelatedWork(), while Function #2
+will simply return out of the statement. Ideally, doUnrelatedWork()
+should not be inside the function and should be in the calling function.
+So to use guard clauses, you would have to decompose large functions into
+smaller ones.
 
 ### Decompose into functions
 
