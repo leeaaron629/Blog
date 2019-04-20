@@ -10,7 +10,8 @@
 	frequently to address deep nesting, but first let's go 
 	over an example of what deep nesting is:
 </p>
-```
+
+```javascript
 const functionWithDeepNesting = (flag, objectName) => {
 
 	if (flag == true) {
