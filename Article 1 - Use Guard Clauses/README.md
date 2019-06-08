@@ -1,17 +1,16 @@
 # Dealing with Deep Nested Code
 
-Deep nesting in code is one of the scariest things to see in your codebase. It is mentally taxing and draining. Studies have shown few people can understand nesting past three levels. Deep nesting results in complex software that is hard to read and maintain. We should avoid it.
+Deep nesting in code is one of the scariest things to see in your codebase. If you find it difficult to read and mentally draining. Don't worry, you're not the only one. Studies have found few people can understand nesting past three levels. Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
 
-... But it is necessary! Conditions are a fundamental concepts of programming (Imperative). 
+... But it is necessary! Conditions are fundamental tools of programming (Imperative). 
 
-Not, exactly. Complicated code, deep nesting, is often a lack of understanding of the problem.
+Not, exactly. Complicated code and deep nesting, often, occurs when there is a lack of understanding of the problem.
 
 ... No. I understand the problem and it is clearly stated that it is needed. There is no other way around it.
 
-Yes, there are some requirements or problems that do require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are the projects that requires a programmer's sanity to maintain and add functionality. Some of these projects will end up failing.
+Okay, you are right! There are some requirements or problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekends and sanity to develop and maintain. Some of these projects will end up failing and we do not want that.
 
 Fortunately, programmers have developed techniques to address these issues (Keep it at a reasonable level) and I will be going over some of these techniques with you today.
-
 
 Applications, and especially enterprise applications, are often littered with deep nested code structures. They are complex and hard to digest.
 
