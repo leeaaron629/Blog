@@ -1,18 +1,16 @@
 # Dealing with Deep Nested Code
 
-Deep nesting in code is one of the scariest things to see in your codebase. If you find it difficult to read and mentally draining. Don't worry, you're not the only one. Studies have found few people can understand nesting past three levels. Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
+Deep nesting in code is one of the scariest things to see in your codebase. If you find it difficult to read and mentally draining, don't worry, you're not the only one. Studies have found few people can understand nesting past three levels. Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
 
 ... But it is necessary! Conditions are fundamental tools of programming (Imperative). 
 
-Not, exactly. Complicated code and deep nesting, often, occurs when there is a lack of understanding of the problem.
+Not, exactly. Complicated code and deep nesting, often, occurs when there is a lack in understanding of the problem.
 
-... No. I understand the problem and it is clearly stated that it is needed. There is no other way around it.
+... No. I understand the problem. There is no other way around it.
 
-Okay, you are right! There are some requirements or problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekends and sanity to develop and maintain. Some of these projects will end up failing and we do not want that.
+Okay, you are right! There are some requirements or problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekend and sanity to develop and maintain. These projects may end up failing as well and no one wants that. Fortunately, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
 
-Fortunately, programmers have developed techniques to address these issues (Keep it at a reasonable level) and I will be going over some of these techniques with you today.
 
-Applications, and especially enterprise applications, are often littered with deep nested code structures. They are complex and hard to digest.
 
 Throughout our programming career, we will encounter
 complex conditional business logic and it may appear to be 
@@ -22,14 +20,22 @@ sometimes all we need to do is some re-organize and
 re-structure the code. Here I will go over a technique I use 
 frequently to address deep nesting, but first let's go 
 over an example of what deep nesting is:
+
+As you can see here we have a function with 4 levels of nesting. It still looks very readable, because of 
 	
 ```javascript
 const functionWithDeepNesting = (flag, objectName) => {
 
-	if (flag == true) {
+	complexity = getComplexity()
+
+	if (complexity < SANITY_THRESHOLD) {
+	
 		obj = dependency.getObjectForWork(objectName);
+		
 		if (obj != null) {
+		
 			let stats = doWorkWithObject(obj);
+			
 			if (stats != null) {
 
 				let success = processStats(stats);
@@ -60,11 +66,13 @@ and see if you can re-write this code to avoid the nesting
 
 ### Use Guard Clauses
 
-Guard clauses are conditional loops that filters out
-invalid conditions and will return out from the function.
+Guard clauses are simple conditionals that filters out
+invalid conditions and will return from the function.
 They're often used to check if a value is NULL, in range,
 or meets a certain criteria. Simply put, they guard your
-functions from invalid values.
+functions from invalid conditions.
+
+Here's an example of its use:
 
 ```javascript
 function printNextNode(node) {
@@ -92,17 +100,19 @@ function printNextNode(node) {
 }
 ```
 
-As you can see the second function is much easier to
-read and comprehend for two primary reason: <br />
+Which one did you like more? Hopefully you prefer the second one
+because I did. I prefer the second for 3 primary reasons:  <br />
 <br />
-1. The primary logic is not nested at all <br />
+1. The primary logic is not nested at all, making it very easy to read. <br />
 2. You do not have to look further than the return statement <br />
+3. Clearly shows the author's intentions
 <br />
-In this example the logic is very short and simple, but
-if you imagine more sophisticated examples, you would have to
-deal with 1+ nesting and scrolling further down to see if there's
-additional logic.
+ 
+For me the 0 level of nesting is easier to read than 2 and 3 levels of nesting.
+Also the guard clause at the top of the function clearly shows the function simply returns when it is NULL. While the first function, you're left wondering... "Okay, but what about the NULL case?", while reading the primary logic. Finally, the second one shows clearer intentions. 
 
+For me the first function says: "If node exists, print!"
+The second functions says: "Print node!"
 
 ```javascript
 const functionWithDeepNestedConditions = (flag, obj) => {
