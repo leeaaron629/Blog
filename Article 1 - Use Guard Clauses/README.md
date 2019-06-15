@@ -104,20 +104,29 @@ Which one did you like more? Hopefully you prefer the second one
 because I did. I prefer the second for 3 primary reasons:  <br />
 <br />
 1. The primary logic is not nested at all, making it very easy to read. <br />
-2. You do not have to look further than the return statement <br />
+2. You do not have to look further down than the return statement <br />
 3. Clearly shows the author's intentions
 <br />
  
-For me the 0 level of nesting is easier to read than 2 and 3 levels of nesting.
-Also the guard clause at the top of the function clearly shows the function simply returns when it is NULL. While the first function, you're left wondering... "Okay, but what about the NULL case?", while reading the primary logic. Finally, the second one shows clearer intentions. 
+For me the no nesting is better to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. While the first function, you're left wondering... "Okay, but what about the NULL case?", while reading the primary logic. Finally, the second one shows clearer intentions. 
 
 For me the first function says: "If node exists, print!"
 The second functions says: "Print node!"
 
-```javascript
-const functionWithDeepNestedConditions = (flag, obj) => {
+However, there's a caveat with using guard clauses. The two
+functions below are not equivalent. If complexity is false,
+Function #1 will perform doUnrelatedWork(), while Function #2
+will simply return out of the statement. Ideally, doUnrelatedWork()
+should not be inside, but should be in the calling function.
+So to use guard clauses, you would have to decompose large functions into
+smaller ones.
 
-	if (flag == true) {
+```javascript
+const functionWithDeepNestedConditions = (obj) => {
+		
+	complexity = getComplexity(obj);	
+		
+	if (complexity < SANITY_THRESHOLD) {
 		if (obj != null) {
 			doWorkWithObject(obj):
 		}
@@ -141,13 +150,6 @@ const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 }
 ```
 
-However, there's a caveat with using guard clauses. The two
-functions above are not equivalent. If flag is false,
-Function #1 will perform doUnrelatedWork(), while Function #2
-will simply return out of the statement. Ideally, doUnrelatedWork()
-should not be inside the function and should be in the calling function.
-So to use guard clauses, you would have to decompose large functions into
-smaller ones.
 
 ### Decompose into functions
 
