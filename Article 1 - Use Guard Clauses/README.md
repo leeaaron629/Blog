@@ -1,4 +1,4 @@
-# Dealing with Deep Nested Code
+# Dealing with Deep Nested Code (Part 1)
 
 Deep nesting in code is one of the scariest things to see in your codebase. If you find it difficult to read and mentally draining, don't worry, you're not the only one. Studies have found few people can understand nesting past three levels. Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
 
@@ -149,11 +149,13 @@ const secondLevelNestingWork = (stats) => {
 ### Use Break Blocks (Rare)
 
 ```javascript
-const functionWithBreakBlock = (flag, obj) => {
+const functionWithBreakBlock = (obj) => {
+
+	complexity = getComplexity(obj);
 
 	do {
 
-		if (flag == false || obj == null) {
+		if (complexity < SANITY_THRESHOLD || obj == null) {
 			break;
 		}
 
