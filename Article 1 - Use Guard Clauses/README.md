@@ -2,7 +2,7 @@
 
 Dealing with deep nested code can be difficult and mentally draining, It is often a major source of code smell in your codebase. If you find it difficult to read, don't worry you're not the only one. Studies have found few people can understand nesting past three levels. (Include Source) Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
 
-... But it is necessary! Conditions are fundamental tools of programming (Imperative). 
+... But it is necessary! Conditionals are fundamental tools of programming (Imperative). 
 
 Not, exactly. Complicated code and deep nesting, often, occurs when there is a lack in understanding of the problem.
 
