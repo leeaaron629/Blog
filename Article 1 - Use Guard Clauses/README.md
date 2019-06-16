@@ -10,60 +10,6 @@ Not, exactly. Complicated code and deep nesting, often, occurs when there is a l
 
 Okay, you are right! There are some requirements or problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekend and sanity to develop and maintain. These projects may end up failing as well and no one wants that. Fortunately, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
 
-
-
-Throughout our programming career, we will encounter
-complex conditional business logic and it may appear to be 
-no other way but to write a bunch of nested if-else 
-or switch statements. These code will look complex, but
-sometimes all we need to do is some re-organize and
-re-structure the code. Here I will go over a technique I use 
-frequently to address deep nesting, but first let's go 
-over an example of what deep nesting is:
-
-As you can see here we have a function with 4 levels of nesting. It still looks very readable, because of 
-	
-```javascript
-const functionWithDeepNesting = (flag, objectName) => {
-
-	complexity = getComplexity()
-
-	if (complexity < SANITY_THRESHOLD) {
-	
-		obj = dependency.getObjectForWork(objectName);
-		
-		if (obj != null) {
-		
-			let stats = doWorkWithObject(obj);
-			
-			if (stats != null) {
-
-				let success = processStats(stats);
-
-				if (success) {
-					console.log('Work stats persisted in database successfully');
-				} else {
-					console.log('Work stats not persisted in database, defaulting to log file');
-					writeStatsToFile(stats);
-				}
-
-			} else {
-				console.log('Failed! No work stats from object');
-			}
-		}
-	}
-
-	doUnrelatedWork();
-}
-```
-
-As you can see here there's 4 level of nesting here and
-would look even more complicated if the actual logic isn't 
-abstracted out with the given functions above. Imagine each 
-of the functions above were actually 10-20 lines of code. This
-can easily be a 100 line of code. Before we continue, take a moment
-and see if you can re-write this code to avoid the nesting
-
 ### Use Guard Clauses
 
 Guard clauses are simple conditionals that filters out
@@ -151,12 +97,16 @@ const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 ```
 
 
-### Decompose into functions
+### Decompose into Functions
+
+You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at then dof the day you're disguising the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
 
 ```javascript
-const functionThatDoesUnrelatedWork = (flag, obj) => {
+const  = (obj) => {
 
-	if (flag == true) {
+	complexity = getComplexity(obj)
+
+	if (complexity < SANITY_THRESHOLD) {
 		obj = dependency.getObjectForWork();
 		firstLevelNestingWork(obj);
 	}
@@ -196,15 +146,7 @@ const secondLevelNestingWork = (stats) => {
 }    
 ```
 
-You can almost keep everything to a nesting of one level,
-if you decompose everything into a routine. Take special notice,
-that each routine that is decomposed has a piece of logic that is
-specific to its level. A simple way to find out if you're abusing
-this method is if you have trouble naming the function. If you do,
-then the logic within the function does not justify creating 
-another method. All you are doing is hiding nesting (complexity), by
-creating another method. Creating another method is complexity in
-itself. So, at the end of the day you're disguising the complexity itself.
+### Use Break Blocks (Rare)
 
 ```javascript
 const functionWithBreakBlock = (flag, obj) => {
@@ -223,12 +165,48 @@ const functionWithBreakBlock = (flag, obj) => {
 }
 ```
 
-There are some very rare cases, where I find some logic fits
-better under the same functions. In this case, we can use a
-break-block. This should only be used, if the level of nesting
-is getting dangerous and there's no other way around it. Document heavily.
+There are some very rare cases, where I find some logic fits better under the same functions. In this case, we can use a break-block. This should only be used, if the level of nesting is getting dangerous and there's no other way around it. Document heavily.
 
 ### Conclusion
+
+Hopefully you will find these tips and tricks as helpful as I did, when I first learned of it. Becareful not to over-use it. See if you can avoid the conditional by having a better understanding of the problem. If not, then use away!
+ly, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
+
+IGNORE BELOW
+
+```javascript
+const functionWithDeepNesting = (flag, objectName) => {
+
+	complexity = getComplexity()
+
+	if (complexity < SANITY_THRESHOLD) {
+	
+		obj = dependency.getObjectForWork(objectName);
+		
+		if (obj != null) {
+		
+			let stats = doWorkWithObject(obj);
+			
+			if (stats != null) {
+
+				let success = processStats(stats);
+
+				if (success) {
+					console.log('Work stats persisted in database successfully');
+				} else {
+					console.log('Work stats not persisted in database, defaulting to log file');
+					writeStatsToFile(stats);
+				}
+
+			} else {
+				console.log('Failed! No work stats from object');
+			}
+		}
+	}
+
+	doUnrelatedWork();
+}
+```
 
 ```javascript
 const primaryFunction = (flag, obj) => {
