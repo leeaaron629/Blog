@@ -143,12 +143,13 @@ function firstLevelNestingWork(obj) {
 
 // Why don't you using guard clauses in this example?
 function secondLevelNestingWork(stats) {
+
 	if (stats === null) {
 		return console.log('Failed! No work stats from object');
 	}
 	
 	if (stats !== null) {
-	
+		// Can create another function here
 		let success = processStats(stats);
 			
 		if (success) {
@@ -163,7 +164,7 @@ function secondLevelNestingWork(stats) {
 }
 ```
 
-I can create another function for the third level, but for now it looks great with one less level of nesting.
+I can tidy this up by creating another function or using a guard clause, but for now it looks great with one less level of nesting.
 
 ### Use Break Blocks (Rare)
 
