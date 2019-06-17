@@ -1,6 +1,6 @@
 # Dealing with Deep Nested Code (Part 1)
 
-Dealing with deep nested code can be difficult and mentally draining. It is often a major source of code smell in your codebase. If you find it difficult to read, don't worry you're not the only one. Studies have found few people can understand nesting past three levels. (Include Source) Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
+Dealing with deep nested code can be difficult and mentally draining. It is often a major source of code smell in your codebase. If you find it difficult to read, don't worry, you're not the only one. Studies have found few people can understand nesting past three levels. (Include Source) Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
 
 ... It is necessary! Conditionals are fundamental tools of programming (Imperative). 
 
@@ -8,7 +8,7 @@ Well, not exactly. Complicated code and deep nesting, often, occurs when there i
 
 ... You may disagree and say no. You understand the problem and there is no other way around it.
 
-Okay, you are right! There are some problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekend and sanity to develop and maintain. These projects may end up failing as well and no one wants that. Fortunately, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
+Okay, you are right! There are some problems that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekend and sanity to develop and maintain. These projects may end up failing as well and no one wants that. Fortunately, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
 
 ### Use Guard Clauses
 
@@ -57,7 +57,7 @@ because I did. I prefer the second for 3 primary reasons:  <br />
 Code without nesting is easier to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. However, in the first function, you're left wondering... "Okay, this is for the non-NULL case. The NULL case will be at the bottom...", while reading the primary logic. By having less to juggle in the mind, the reader will be able to understand the core logic better. Finally, the second one shows clearer intentions. 
 
 The first function says: "If node exists, print!" <br />
-The second functions says: "Print node!"
+The second function says: "Print node!"
 
 However, there's a caveat with using guard clauses. The two functions below are not equivalent.
 
@@ -74,6 +74,7 @@ const functionWithDeepNestedConditions = (obj) => {
 	
 }
 
+// What's the flag parameter doing here?
 const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 
 	if (obj == null) {
@@ -86,6 +87,48 @@ const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 
 	doWorkWithObject(obj);
 	doUnrelatedWork();
+}
+```
+
+```javascript
+// The example could be better. This is how it would be done with a guard clause
+const functionThatWillWorkWithGuardClauses = (obj) => {
+	if (obj === null || getComplexity(obj) >= SANITY_THRESHOLD) {
+		return doUnrelatedWork();
+	}
+
+	doWorkWithObject(obj);
+	doUnrelatedWork();
+}
+```
+
+But the use of guard clauses usually makes the conditionals in your if statements really confusing. This is because, instead of relying nested conditionals, now you have to chain conditionals to avoid nesting. To make it more readable, you can mention that you can pull that big conditional out into it's own method
+
+```javascript
+const functionThatWillWorkWithGuardClauses = (obj) => {
+	if (isObjectValid(obj)) {
+		return doUnrelatedWork();
+	}
+
+	doWorkWithObject(obj);
+	doUnrelatedWork();
+}
+
+const isObjectValid = (obj) => {
+	return obj === null || getComplexity(obj) >= SANITY_THRESHOLD
+}
+```
+
+Also, if the order that the functions executes doesn't matter, then this is also valid
+```javascript
+const functionWithDeepNestedConditions = (obj) => {
+	doUnrelatedWork();
+
+	if (isObjectValid(obj)) {
+		return;
+	}
+		
+	doWorkWithObject(obj);
 }
 ```
 
@@ -105,6 +148,7 @@ const  = (obj) => {
 	complexity = getComplexity(obj)
 
 	if (complexity < SANITY_THRESHOLD) {
+		// not sure what this line is doing. Might make your example confusing and harder to follow
 		obj = dependency.getObjectForWork();
 		firstLevelNestingWork(obj);
 	}
@@ -123,25 +167,21 @@ const firstLevelNestingWork = (obj) => {
 
 }
 
+// Why don't you using guard clauses in this example?
 const secondLevelNestingWork = (stats) => {
-
-	if (stats != null) {
-		// Function Primary Logic
-		let success = processStats(stats);
-
-		// Can even create a thirdLevelFunctionHere()
-		if (success) {
-			console.log('Work stats persisted in database successfully');
-		} else {
-			console.log('Work stats not persisted in database, defaulting to log file');
-			// Can be even uglier if handling exceptions here
-			writeStatsToFile(stats);
-		}
-
-	} else {
-		console.log('Failed! No work stats from object');
+	if (stats === null) {
+		return console.log('Failed! No work stats from object');
 	}
-}    
+
+	const success = processStats(stats);
+
+	if (!success) {
+		console.log('Work stats not persisted in database, defaulting to log file');
+		return writeStatsToFile(stats);
+	}
+
+	console.log('Work stats persisted in database successfully');
+}
 ```
 
 I can create another function for the third level, but for now it looks great with one less level of nesting.
