@@ -54,9 +54,9 @@ because I did. I prefer the second for 3 primary reasons:  <br />
 3. Clearly shows the author's intentions
 <br />
  
-For me no nesting is better to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. However, in the first function, you're left wondering... "Okay, this is for the non-NULL case. The NULL case will be at the bottom...", while reading the primary logic. By having less to juggle in the mind, the reader will be able to understand the core logic better. Finally, the second one shows clearer intentions. 
+Code without nesting is easier to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. However, in the first function, you're left wondering... "Okay, this is for the non-NULL case. The NULL case will be at the bottom...", while reading the primary logic. By having less to juggle in the mind, the reader will be able to understand the core logic better. Finally, the second one shows clearer intentions. 
 
-For me the first function says: "If node exists, print!" <br />
+The first function says: "If node exists, print!" <br />
 The second functions says: "Print node!"
 
 However, there's a caveat with using guard clauses. The two functions below are not equivalent.
@@ -97,7 +97,7 @@ Which brings me to my next technique...
 
 Abstract out the complexity into small modular functions.
 
-You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at the end of the day you're disguising the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
+You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you have trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at the end of the day you're obfuscating the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
 
 ```javascript
 const  = (obj) => {
@@ -144,7 +144,7 @@ const secondLevelNestingWork = (stats) => {
 }    
 ```
 
-I can create another function for the third level, but for now it looks great with one less level of nesting. All I'm trying to accomplish with this technique is to remove 1-2 levels of nesting with the highest complexity.
+I can create another function for the third level, but for now it looks great with one less level of nesting.
 
 ### Use Break Blocks (Rare)
 
@@ -167,12 +167,11 @@ const functionWithBreakBlock = (obj) => {
 }
 ```
 
-There are some very rare cases, where I find some logic fits better under the same functions. In this case, we can use a break-block. This should only be used, if the level of nesting is getting dangerous and there's no other way around it. Document heavily.
+There are rare cases, where I find certain logic fits better under the same functions. In this case, we can use a break-block. This should only be used, if the level of nesting is getting dangerous and there's no other way around it. Document heavily.
 
 ### Conclusion
 
-Hopefully you will find these tips and tricks as helpful as I did, when I first learned of it. Becareful not to over-use it. See if you can avoid the conditional by having a better understanding of the problem. If not, then use away!
-ly, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
+Hopefully you will find these tips and tricks helpful as I did, when I first learned of it. Becareful not to over-use it. See if you can avoid the conditional by having a better understanding of the problem. If not, then use away!
 
 IGNORE BELOW
 
