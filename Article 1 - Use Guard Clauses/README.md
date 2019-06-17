@@ -142,19 +142,24 @@ function firstLevelNestingWork(obj) {
 }
 
 // Why don't you using guard clauses in this example?
-const secondLevelNestingWork = (stats) => {
+function secondLevelNestingWork(stats) {
 	if (stats === null) {
 		return console.log('Failed! No work stats from object');
 	}
-
-	const success = processStats(stats);
-
-	if (!success) {
-		console.log('Work stats not persisted in database, defaulting to log file');
-		return writeStatsToFile(stats);
+	
+	if (stats !== null) {
+	
+		let success = processStats(stats);
+			
+		if (success) {
+			console.log('Work stats persisted in database successfully');
+		} else {
+			console.log('Work stats not persisted in database, defaulting to log file');
+			writeStatsToFile(stats);
+		}
+		
 	}
-
-	console.log('Work stats persisted in database successfully');
+	
 }
 ```
 
