@@ -4,11 +4,11 @@ Dealing with deep nested code can be difficult and mentally draining, It is ofte
 
 ... But it is necessary! Conditionals are fundamental tools of programming (Imperative). 
 
-Not, exactly. Complicated code and deep nesting, often, occurs when there is a lack in understanding of the problem.
+Well, not exactly. Complicated code and deep nesting, often, occurs when there is a lack in understanding of the problem.
 
-... No. I understand the problem. There is no other way around it.
+... You may disagree and say no. You understand the problem and there is no other way around it.
 
-Okay, you are right! There are some requirements or problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekend and sanity to develop and maintain. These projects may end up failing as well and no one wants that. Fortunately, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
+Okay, you are right! There are some problems that that require such complexity. In fact, enterprise applications are littered with deep nested code. However, these are also the projects that requires a programmer's weekend and sanity to develop and maintain. These projects may end up failing as well and no one wants that. Fortunately, programmers have developed techniques to prevent deep nesting and I will be going over some of these techniques with you today.
 
 ### Use Guard Clauses
 
@@ -54,40 +54,33 @@ because I did. I prefer the second for 3 primary reasons:  <br />
 3. Clearly shows the author's intentions
 <br />
  
-For me the no nesting is better to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. While the first function, you're left wondering... "Okay, but what about the NULL case?", while reading the primary logic. Finally, the second one shows clearer intentions. 
+For me no nesting is better to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. However, in the first function, you're left wondering... "Okay, this is for the non-NULL case. The NULL case will be at the bottom...", while reading the primary logic. By having less to juggle in the mind, the reader will be able to understand the core logic better. Finally, the second one shows clearer intentions. 
 
 For me the first function says: "If node exists, print!"
 The second functions says: "Print node!"
 
-However, there's a caveat with using guard clauses. The two
-functions below are not equivalent. If complexity is false,
-Function #1 will perform doUnrelatedWork(), while Function #2
-will simply return out of the statement. Ideally, doUnrelatedWork()
-should not be inside, but should be in the calling function.
-So to use guard clauses, you would have to decompose large functions into
-smaller ones.
+However, there's a caveat with using guard clauses. The two functions below are not equivalent.
 
 ```javascript
 const functionWithDeepNestedConditions = (obj) => {
-		
-	complexity = getComplexity(obj);	
-		
-	if (complexity < SANITY_THRESHOLD) {
-		if (obj != null) {
-			doWorkWithObject(obj):
+
+	if (obj != null) {
+		if (getComplexity(obj) < SANITY_THRESHOLD) {
+			doWorkWithObject(obj);
 		}
 	}
-
+		
 	doUnrelatedWork();
+	
 }
 
 const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 
-	if (flag == false) {
+	if (obj == null) {
 		return;
 	}
 
-	if (object == null) {
+	if (getComplexity(obj) < SANITY_THRESHOLD) {
 		return;
 	}
 
@@ -96,10 +89,15 @@ const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 }
 ```
 
+If complexity is false, Function #1 will perform doUnrelatedWork(), while Function #2 will simply return out of the statement. Ideally, doUnrelatedWork() should not be inside, but should be in the calling function. So to use guard clauses, you would have to decompose large functions into smaller ones.
+
+Which brings me to my next technique...
 
 ### Decompose into Functions
 
-You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at then dof the day you're disguising the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
+Abstract out the complexity into small modular functions.
+
+You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at the end of the day you're disguising the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
 
 ```javascript
 const  = (obj) => {
@@ -145,6 +143,8 @@ const secondLevelNestingWork = (stats) => {
 	}
 }    
 ```
+
+I can probably create another function for the third level, but for now it looks great with one less level of nesting.
 
 ### Use Break Blocks (Rare)
 
