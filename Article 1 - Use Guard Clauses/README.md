@@ -62,7 +62,7 @@ The second function says: "Print node!"
 However, there's a caveat with using guard clauses. The two functions below are not equivalent.
 
 ```javascript
-const functionWithDeepNestedConditions = (obj) => {
+function withDeepNestedConditions(obj) {
 
 	if (obj != null) {
 		if (getComplexity(obj) < SANITY_THRESHOLD) {
@@ -70,14 +70,13 @@ const functionWithDeepNestedConditions = (obj) => {
 		}
 	}
 		
-	doUnrelatedWork();
+	doPostProcessWork(obj);
 	
 }
 
-// What's the flag parameter doing here?
-const functionThatWontWorkWithGuardClauses = (flag, obj) => {
+function wontWorkWithGuardClauses(obj) => {
 
-	if (obj == null) {
+	if (obj === null) {
 		return;
 	}
 
@@ -86,53 +85,30 @@ const functionThatWontWorkWithGuardClauses = (flag, obj) => {
 	}
 
 	doWorkWithObject(obj);
-	doUnrelatedWork();
+	doPostProcessWork(obj);
 }
 ```
 
 ```javascript
-// The example could be better. This is how it would be done with a guard clause
-const functionThatWillWorkWithGuardClauses = (obj) => {
-	if (obj === null || getComplexity(obj) >= SANITY_THRESHOLD) {
-		return doUnrelatedWork();
-	}
+function willWorkWithGuardClauses = (obj) => {
 
-	doWorkWithObject(obj);
-	doUnrelatedWork();
-}
-```
-
-But the use of guard clauses usually makes the conditionals in your if statements really confusing. This is because, instead of relying nested conditionals, now you have to chain conditionals to avoid nesting. To make it more readable, you can mention that you can pull that big conditional out into it's own method
-
-```javascript
-const functionThatWillWorkWithGuardClauses = (obj) => {
-	if (isObjectValid(obj)) {
-		return doUnrelatedWork();
-	}
-
-	doWorkWithObject(obj);
-	doUnrelatedWork();
-}
-
-const isObjectValid = (obj) => {
-	return obj === null || getComplexity(obj) >= SANITY_THRESHOLD
-}
-```
-
-Also, if the order that the functions executes doesn't matter, then this is also valid
-```javascript
-const functionWithDeepNestedConditions = (obj) => {
-	doUnrelatedWork();
-
-	if (isObjectValid(obj)) {
+	if (obj === null) {
 		return;
 	}
-		
+	
+	if (getComplexity(obj) >= SANITY_THRESHOLD) {
+		doPostProcessWork(obj);
+		return;
+	}
+
 	doWorkWithObject(obj);
+	doPostProcessWork(obj);
+	
 }
+
 ```
 
-If complexity is false, Function #1 will perform doUnrelatedWork(), while Function #2 will simply return out of the statement. Ideally, doUnrelatedWork() should not be inside, but should be in the calling function. So to use guard clauses, you would have to decompose large functions into smaller ones.
+If complexity is false, Function #1 will perform doMoreWorkOnObject(), while Function #2 will simply return out of the statement. Ideally, doMoreWorkOnObject() should not be inside, but should be in the calling function. So to use guard clauses, you would have to decompose large functions into smaller ones.
 
 Which brings me to my next technique...
 
@@ -143,26 +119,24 @@ Abstract out the complexity into small modular functions.
 You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you have trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at the end of the day you're obfuscating the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
 
 ```javascript
-const  = (obj) => {
+function doAlotOfWork(obj) => {
 
-	complexity = getComplexity(obj)
-
-	if (complexity < SANITY_THRESHOLD) {
-		// not sure what this line is doing. Might make your example confusing and harder to follow
-		obj = dependency.getObjectForWork();
-		firstLevelNestingWork(obj);
-	}
-
-	doUnrelatedWork(); // Function's Primary Logic
-}
-
-const firstLevelNestingWork = (obj) => {
-
-	if (obj == null) {
+	if (obj === null) {
 		return;
 	}
 
-	let stats = doWorkWithObject(obj); // Function's Primary Logic
+	if (getComplexity(obj) < SANITY_THRESHOLD) {
+		
+		firstLevelNestingWork(obj);
+	}
+
+	doPostProcessWork(obj); // Function's Primary Logic
+}
+
+function firstLevelNestingWork(obj) {
+
+	// Function's Primary Logic
+	let stats = doWorkWithObject(obj); 
 	secondLevelNestingWork(stats);
 
 }
