@@ -2,7 +2,7 @@
 
 Dealing with deep nested code can be difficult and mentally draining, It is often a major source of code smell in your codebase. If you find it difficult to read, don't worry you're not the only one. Studies have found few people can understand nesting past three levels. (Include Source) Deep nesting results in complex software that is hard to read, maintain, and work on. Everyone should avoid it!
 
-... But it is necessary! Conditionals are fundamental tools of programming (Imperative). 
+... It is necessary! Conditionals are fundamental tools of programming (Imperative). 
 
 Well, not exactly. Complicated code and deep nesting, often, occurs when there is a lack in understanding of the problem.
 
@@ -56,7 +56,7 @@ because I did. I prefer the second for 3 primary reasons:  <br />
  
 For me no nesting is better to read than any nesting. Since the guard clause clearly shows the function returns when it is NULL, we do not have to consider NULLs when reading further down. However, in the first function, you're left wondering... "Okay, this is for the non-NULL case. The NULL case will be at the bottom...", while reading the primary logic. By having less to juggle in the mind, the reader will be able to understand the core logic better. Finally, the second one shows clearer intentions. 
 
-For me the first function says: "If node exists, print!"
+For me the first function says: "If node exists, print!" <br />
 The second functions says: "Print node!"
 
 However, there's a caveat with using guard clauses. The two functions below are not equivalent.
@@ -144,7 +144,7 @@ const secondLevelNestingWork = (stats) => {
 }    
 ```
 
-I can probably create another function for the third level, but for now it looks great with one less level of nesting.
+I can create another function for the third level, but for now it looks great with one less level of nesting. All I'm trying to accomplish with this technique is to remove 1-2 levels of nesting with the highest complexity.
 
 ### Use Break Blocks (Rare)
 
