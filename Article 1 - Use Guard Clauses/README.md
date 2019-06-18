@@ -65,22 +65,27 @@ However, there's a caveat with using guard clauses. The two functions below are 
 function withDeepNestedConditions(obj) {
 
 	if (obj != null) {
-		if (getComplexity(obj) < SANITY_THRESHOLD) {
+
+		if (calcComplexity(obj) < SANITY_THRESHOLD) {
 			doWorkWithObject(obj);
-		}
+		} else {
+            		log(obj)
+        	}
+
 	}
 		
 	doPostProcessWork(obj);
 	
 }
 
-function wontWorkWithGuardClauses(obj) => {
+function wontWorkWithGuardClauses(obj) {
 
 	if (obj === null) {
 		return;
 	}
 
-	if (getComplexity(obj) < SANITY_THRESHOLD) {
+	if (calcComplexity(obj) >= SANITY_THRESHOLD) {
+		log(obj);
 		return;
 	}
 
@@ -90,13 +95,14 @@ function wontWorkWithGuardClauses(obj) => {
 ```
 
 ```javascript
-function willWorkWithGuardClauses = (obj) => {
+function willWorkWithGuardClauses(obj) {
 
 	if (obj === null) {
 		return;
 	}
 	
-	if (getComplexity(obj) >= SANITY_THRESHOLD) {
+	if (calcComplexity(obj) >= SANITY_THRESHOLD) {
+        log(obj);
 		doPostProcessWork(obj);
 		return;
 	}
@@ -110,184 +116,152 @@ function willWorkWithGuardClauses = (obj) => {
 
 If complexity is false, Function #1 will perform doMoreWorkOnObject(), while Function #2 will simply return out of the statement. Ideally, doMoreWorkOnObject() should not be inside, but should be in the calling function. So to use guard clauses, you would have to decompose large functions into smaller ones.
 
-Which brings me to my next technique...
+Which brings us to another simple and familiar technique...
 
 ### Decompose into Functions
 
-Abstract out the complexity into small modular functions.
-
-You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you have trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at the end of the day you're obfuscating the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
+Abstract out the complexity into small modular functions. You can almost keep everything to a nesting of one level, if you decompose everything into its own function. However, it should not be over-used. A simple rule to follow is, if you have trouble naming the new function, then the logic within the function does not justify creating another method. Creating another method is complexity in itself. So, at the end of the day you're obfuscating the complexity. A well decomposed function will abstract out the complexity and show clearer intentions. Use sparingly!
 
 ```javascript
-function doAlotOfWork(obj) => {
+function doAlotOfWork(obj, user) {
 
 	if (obj === null) {
 		return;
+    	}
+    
+    	if (user === null) {
+        	user = getDefaultUser()
+    	}
+
+	if (calcComplexity(obj) < user.getSanityThreshold()) {
+
+        let stats = user.doWorkWithObject(obj);
+        
+		if (stats.getValue() >= 10) {
+
+            		if (validateStats(stats)) {
+
+                		if (processStats(stats)) { 
+                    			console.log('Work stats persisted in database successfully');
+                		} else {
+                    			console.log('Work stats not persisted in database, defaulting to log file');
+                    			writeStatsToFile(stats);
+                		}
+
+            		} else {
+                		console.log('Invalid stats');
+            		}
+
+        	} else {
+            		console.log('Processed stats is less than 10: ', stats);
+        	}
+
 	}
 
-	if (getComplexity(obj) < SANITY_THRESHOLD) {
-		
-		firstLevelNestingWork(obj);
-	}
-
-	doPostProcessWork(obj); // Function's Primary Logic
-}
-
-function firstLevelNestingWork(obj) {
-
-	// Function's Primary Logic
-	let stats = doWorkWithObject(obj); 
-	secondLevelNestingWork(stats);
-
-}
-
-// Why don't you using guard clauses in this example?
-function secondLevelNestingWork(stats) {
-
-	if (stats === null) {
-		return console.log('Failed! No work stats from object');
-	}
-	
-	if (stats !== null) {
-		// Can create another function here
-		let success = processStats(stats);
-			
-		if (success) {
-			console.log('Work stats persisted in database successfully');
-		} else {
-			console.log('Work stats not persisted in database, defaulting to log file');
-			writeStatsToFile(stats);
-		}
-		
-	}
-	
+	doPostProcessWork(obj);
 }
 ```
 
-I can tidy this up by creating another function or using a guard clause, but for now it looks great with one less level of nesting.
+Now broken down into two parts...
+
+```
+function getStatisticsFromObject(obj, user) {
+
+    if (obj === null) {
+		return;
+    }
+    
+    if (user === null) {
+        user = getDefaultUser()
+    }
+
+    if (calcComplexity(obj) < user.getSanityThreshold()) {
+        
+        let stats = user.doWorkWithObject(obj);
+
+        if (stats.getValue >= 10) {
+            persistUserStats(stats);
+        } else {
+            console.log('Processed stats is less than 10: ', stats);
+        }
+
+    }
+
+    // Ideally this should be move to the caller of firstPart
+    doPostProcessWork();
+
+}
+
+function persistUserStats(stats) {
+    
+    if (validateStats(stats)) {
+
+        if (processStats(stats)) { 
+            console.log('Work stats persisted in database successfully');
+        } else {
+            console.log('Work stats not persisted in database, defaulting to log file');
+            writeStatsToFile(stats);
+        }
+
+    } else {
+        console.log('Invalid stats');
+    }   
+
+}
+```
+
+In the first example, we have four levels of nesting and in the second example we have two levels. All we did was split it into two and we have a reduction of two levels. You can continue breaking it down, but I find this easy enough to read. Breaking it down further would result in more functions and more time spent naming them.
+
 
 ### Use Break Blocks (Rare)
 
+Finally, here's a neat trick that maybe useful in certain scenarios. In these scenarios, I find certain logic fits better under the same functions. In this case, we can use a break-block.
+
 ```javascript
-const functionWithBreakBlock = (obj) => {
+function persistUserStats(obj, user) {
 
-	complexity = getComplexity(obj);
+    if (obj === null) {
+        return;
+    }
 
-	do {
+    if (user === null) {
+        user = getDefaultUser();
+    }
 
-		if (complexity < SANITY_THRESHOLD || obj == null) {
-			break;
-		}
+    do {
 
-		doWorkWithObject(obj);
+        if (calcComplexity(obj) >= user.getSanityThreshold()) {
+            break;
+        }
 
-	} while (false);
+        let stats = user.doWorkWithObject(obj);
 
-	doRelatedWork(obj);
+        if (stats.getValue() < 10) {
+            console.log('Processed stats is less than 10: ', stats);
+            break;
+        }
+
+        if (!validateStats(stats)) {
+            console.log('Invalid stats');
+            break;
+        }
+
+        if (processStats(stats)) {
+            console.log('Work stats persisted in database successfully');
+        } else {
+            console.log('Work stats not persisted in database, defaulting to log file');
+            writeStatsToFile(stats);
+        }
+
+    } while (false);
+
+    doPostProcessWork(obj);
+    
 }
 ```
 
-There are rare cases, where I find certain logic fits better under the same functions. In this case, we can use a break-block. This should only be used, if the level of nesting is getting dangerous and there's no other way around it. Document heavily.
+This should be used, if the level of nesting is getting dangerous and there's no other way around it. Document heavily.
 
 ### Conclusion
 
 Hopefully you will find these tips and tricks helpful as I did, when I first learned of it. Becareful not to over-use it. See if you can avoid the conditional by having a better understanding of the problem. If not, then use away!
-
-IGNORE BELOW
-
-```javascript
-const functionWithDeepNesting = (flag, objectName) => {
-
-	complexity = getComplexity()
-
-	if (complexity < SANITY_THRESHOLD) {
-	
-		obj = dependency.getObjectForWork(objectName);
-		
-		if (obj != null) {
-		
-			let stats = doWorkWithObject(obj);
-			
-			if (stats != null) {
-
-				let success = processStats(stats);
-
-				if (success) {
-					console.log('Work stats persisted in database successfully');
-				} else {
-					console.log('Work stats not persisted in database, defaulting to log file');
-					writeStatsToFile(stats);
-				}
-
-			} else {
-				console.log('Failed! No work stats from object');
-			}
-		}
-	}
-
-	doUnrelatedWork();
-}
-```
-
-```javascript
-const primaryFunction = (flag, obj) => {
-	
-	doComplexConditionalWork(flag, objectName);
-	doUnrelatedWork();
-}
-
-const doComplexConditionalWork = (flag, objectName) => {
-
-	if (flag == false) {
-		return;
-	}
-
-	let obj = dependency.getObjectForWork(objectName);
-	let stats = doWorkWithObject(obj);
-	let success = processStats(stats);
-	processResultFromStats(success);
-}
-
-const doWorkWithObject = (obj) => {
-
-	if (object == null) {
-		return;
-	}
-
-	// TODO - processObject logic here
-
-	return obj;
-}
-
-const processStats = (stats) => {
-
-	if (stats == null) {
-		console.log('Failed! No work stats from object');
-		return null;
-	}
-
-	// TODO - processStats logic here
-
-	return stats;
-}
-
-const processResultFromStats = (success) => {
-
-	if (success) {
-		console.log('Work stats persisted in database successfully');
-	} else {
-		console.log('Work stats not persisted in database, defaulting to log file');
-		writeStatsToFile(stats);
-	}
-}
-```
-
-Here's the revised version of the code above. At most,
-there is 1 level of nesting compare to the 4 in the previous version.
-Logic are broken down to their own functions and can be re-used
-elsewhere, if needed. Lastly, I must caution the over-use of these
-methods. There's no need to use guard functions if it's more than
-2-3 lines of code. There's no need to create methods to disguise complexity
-for another form of complexity. Finally, if the logic makes sense
-inside one function then keep it in the same function. However, I hope 
-you will consider some of these techinques when nesting is getting out of hand.
