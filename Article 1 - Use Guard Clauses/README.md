@@ -12,11 +12,7 @@ Okay, you are right! There are some problems that require such complexity. In fa
 
 ### Use Guard Clauses
 
-Guard clauses are simple conditionals that filters out
-invalid conditions and will return from the function.
-They're often used to check if a value is NULL, in range,
-or meets a certain criteria. Simply put, they guard your
-functions from invalid conditions.
+Guard clauses are simple conditionals that filters outcinvalid conditions and will return from the function. They're often used to check if a value is NULL, in range, or meets a certain criteria. Simply put, they guard your functions from invalid conditions.
 
 Here's an example of its use:
 
@@ -59,7 +55,9 @@ Code without nesting is easier to read than any nesting. Since the guard clause 
 The first function says: "If node exists, print!" <br />
 The second function says: "Print node!"
 
-However, there's a caveat with using guard clauses. The two functions below are not equivalent.
+However, there's a caveat with using guard clauses. The two functions below are not equivalent. 
+
+Before reading further, imagine the made-up functions I used in the examples below is actually 10-20 lines of code. No
 
 ```javascript
 function withDeepNestedConditions(obj) {
@@ -114,7 +112,7 @@ function willWorkWithGuardClauses(obj) {
 
 ```
 
-If complexity is false, Function #1 will perform doMoreWorkOnObject(), while Function #2 will simply return out of the statement. Ideally, doMoreWorkOnObject() should not be inside, but should be in the calling function. So to use guard clauses, you would have to decompose large functions into smaller ones.
+As you can see, if complexity is false, Function #1 will perform doMoreWorkOnObject(), while Function #2 will simply return out of the statement. Ideally, doMoreWorkOnObject() should not be inside, but should be in the calling function. So to use guard clauses, you would have to decompose large functions into smaller ones.
 
 Which brings us to another simple and familiar technique...
 
@@ -164,7 +162,7 @@ function doAlotOfWork(obj, user) {
 
 Now broken down into two parts...
 
-```
+```javascript
 function getStatisticsFromObject(obj, user) {
 
     if (obj === null) {
