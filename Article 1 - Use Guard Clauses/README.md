@@ -100,7 +100,7 @@ function willWorkWithGuardClauses(obj) {
 	}
 	
 	if (calcComplexity(obj) >= SANITY_THRESHOLD) {
-        log(obj);
+        	log(obj);
 		doPostProcessWork(obj);
 		return;
 	}
