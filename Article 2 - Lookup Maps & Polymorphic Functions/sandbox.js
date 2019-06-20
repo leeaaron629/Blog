@@ -24,7 +24,7 @@ const carPriceLookupMap = {
 const car1 = {
     make: HONDA,
     model: CIVIC,
-    year: 2000
+    year: 1999
 }
 
 const car2 = {
