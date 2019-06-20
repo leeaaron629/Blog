@@ -21,19 +21,134 @@ const carPriceLookupMap = {
     }
 }
 
-console.log(carPriceLookupMap[HONDA][CIVIC][getYearKey(car)]);
-console.log(carPriceLookupMap[TOYATA][AVALON][getYearKey(car)]);
+const car1 = {
+    make: HONDA,
+    model: CIVIC,
+    year: 2000
+}
 
-function getYearKey(car) {
-    if (car.year < 2000) {
+const car2 = {
+    make: TOYATA,
+    model: AVALON,
+    year: 2010
+}
+
+function getYearKeyV2(carYear) {
+    return Math.max(1999, Math.min(carYear, 2010));
+}
+
+const carPriceLookupMapV2 = {
+    Toyata: {
+        Prius: {
+            1999: 5000,
+            2000: 8250,
+            2001: 8250,
+            2002: 8250,
+            2003: 8250,
+            2003: 8250,
+            2004: 8250,
+            2005: 8250,
+            2006: 8250,
+            2007: 8250,
+            2008: 8250,
+            2009: 8250,
+            2010: 11500
+        },
+        Corolla: {
+            1999: 4500,
+            2000: 8000,
+            2001: 8000,
+            2002: 8000,
+            2003: 8000,
+            2003: 8000,
+            2004: 8000,
+            2005: 8000,
+            2006: 8000,
+            2007: 8000,
+            2008: 8000,
+            2009: 8000,
+            2010: 10500
+        },
+        Avalon: {
+            1999: 6000,
+            2000: 8000,
+            2001: 8000,
+            2002: 8000,
+            2003: 8000,
+            2003: 8000,
+            2004: 8000,
+            2005: 8000,
+            2006: 8000,
+            2007: 8000,
+            2008: 8000,
+            2009: 8000,
+            2010: 12500
+        }
+    },
+    Honda: {
+        Civic: {
+            1999: 4000,
+            2000: 7500,
+            2001: 7500,
+            2002: 7500,
+            2003: 7500,
+            2003: 7500,
+            2004: 7500,
+            2005: 7500,
+            2006: 7500,
+            2007: 7500,
+            2008: 7500,
+            2009: 7500,
+            2010: 10000
+        },
+        CR_V: {
+            1999: 6500,
+            2000: 9000,
+            2001: 9000,
+            2002: 9000,
+            2003: 9000,
+            2003: 9000,
+            2004: 9000,
+            2005: 9000,
+            2006: 9000,
+            2007: 9000,
+            2008: 9000,
+            2009: 9000,
+            2010: 12000
+        },
+        Accord: {
+            1999: 5000,
+            2000: 8000,
+            2001: 8000,
+            2002: 8000,
+            2003: 8000,
+            2003: 8000,
+            2004: 8000,
+            2005: 8000,
+            2006: 8000,
+            2007: 8000,
+            2008: 8000,
+            2009: 8000,
+            2010: 11000
+        }
+    }
+}
+
+console.log(carPriceLookupMap[car1.make][car1.model][getYearKey(car1.year)]);
+console.log(carPriceLookupMap[car2.make][car2.model][getYearKey(car2.year)]);
+console.log(carPriceLookupMapV2[car1.make][car1.model][getYearKeyV2(car1.year)]);
+console.log(carPriceLookupMapV2[car2.make][car2.model][getYearKeyV2(car2.year)]);
+
+
+function getYearKey(carYear) {
+    if (carYear < 2000) {
         return 0;
-    } else if (car.year < 2010) {
+    } else if (carYear < 2010) {
         return 1;
     } else {
         return 2;
     }
 }
-
 
 function getCarPrice(car) {
 
