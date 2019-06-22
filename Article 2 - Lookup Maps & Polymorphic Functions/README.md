@@ -1,5 +1,9 @@
 # Dealing with Deep Nested Code (Part 2)
 
+Hi Welcome to part 2 of dealing with nested code. If part 1, we went over some ways where we can avoid deep nesting. However, we still ended up using conditionals for control flow. Today we will go over some techniques that doesn't use any conditionals at all!
+
+Let's take a look at the following code:
+
 ```javascript
 function getCarPrice(car) {
 
@@ -73,7 +77,7 @@ function getCarPrice(car) {
 }
 ```
 
-Now imagine doing all of that in one line of code. Impossible right?
+What a mess right? Now imagine doing all of that in one line of code. Impossible right?
 
 ```javascript
 carPriceLookupMap[car1.make][car1.model][getYearKey(car1.year)];
