@@ -1,6 +1,8 @@
 # Dealing with Deep Nested Code (Part 2)
 
-Hi Welcome to part 2 of dealing with nested code. If part 1, we went over some ways where we can avoid deep nesting. However, we still ended up using conditionals for control flow. Today we will go over some techniques that doesn't use any conditionals at all!
+Hi! Welcome to part 2 of Dealing with Deep Nested Code. If you haven't check out part 1, please do (link here).
+
+In part 1, we went over some methods on keeping nesting to a minimum by simply re-structuring the code. However, we still ended up using conditionals. Today we will go over methods that doesn't use any conditionals at all!
 
 Let's take a look at the following code:
 
@@ -88,6 +90,7 @@ Well there it is! One line of code.
 I'm kidding, here's the rest of the code...
 
 ```javascript
+// The magic!
 const carPriceLookupMap = {
     Toyata: {
         Prius: [5000,8250,11500],
@@ -101,6 +104,7 @@ const carPriceLookupMap = {
     }
 }
 
+// Helper function
 function getYearKey(carYear) {
     if (carYear < 2000) {
         return 0;
@@ -111,13 +115,16 @@ function getYearKey(carYear) {
     }
 }
 
+// Test Data
 const car = {
     make: HONDA,
     model: CIVIC,
     year: 1999
 }
 
+// The primary logic
 console.log(carPriceLookupMap[car.make][car.model][getYearKey(car.year)]);
 ```
 
+Thi
 Feel free to try this out in your browser!
