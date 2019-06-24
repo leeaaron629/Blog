@@ -1,10 +1,10 @@
 # Dealing with Deep Nested Code (Part 2)
 
-Hi! Welcome to part 2 of Dealing with Deep Nested Code. In part 1, we went over some methods on keeping nesting to a minimum by simply re-structuring the code through guard clauses and method decomposition. However, we still ended up using conditionals. Today we will go over approaches that does not use conditionals at all. This way we are avoiding conditionals instead of moving it elsewhere. 
+Hi! Welcome to part 2 of Dealing with Deep Nested Code. In part 1, we went over some methods on keeping nesting to a minimum by simply re-structuring the code through guard clauses and method decomposition. However, we still ended up using conditionals. Today we will go over approaches that do not use conditionals at all. This way we are avoiding conditionals instead of moving it elsewhere.
 
 ### Table-Driven Methods
 
-Table-driven methods, as the name suggests, uses indexed tables (Arrays) and HashTables (Maps), as look-up table.
+Table-driven methods, as the name suggests, uses indexed tables (Arrays) and HashTables (Maps) as look-up tables.
 
 Let's take a look at the following code to see what it can do:
 
@@ -87,7 +87,7 @@ What a mess right? Now imagine doing all of that in one line of code. Impossible
 carPriceLookupMap[car1.make][car1.model][getYearKey(car1.year)];
 ```
 
-Well there it is! One line of code. 
+Well, there it is! One line of code.
 
 I'm kidding, here's the rest of the code...
 
@@ -130,9 +130,9 @@ const car = {
 console.log(carPriceLookUpTable[car.make][car.model][getYearKey(car.year)]);
 ```
 
-Not exactly a one-liner, but the intention and logic is much more clear than the first. Let's take an in-depth look at how this works. 
+Not exactly a one-liner, but the intention and logic are much more clear than the first. Let's take an in-depth look at how this works.
 
-The essence of this problem is classifying an object and applying the corresponding logic to it. So, in a look-up table we use properties of the object as keys and indices. By doing this, the correct logic can be stored with its corresponding indices. During,run-time we find the appropriate logic through the object's properties.
+The essence of this problem is classifying an object and applying the corresponding logic to it. So, in a look-up table, we use properties of the object as keys and indices. By doing this, the correct logic can be stored with its corresponding indices. During, run-time we find the appropriate logic through the object's properties.
 
 Here's a simpler version of the above example:
 
@@ -146,11 +146,11 @@ const toyataCarModelPriceLookUpTable = {
 let priusCarPrice = toyataCarModelPriceLookUpTable['Prius'];
 ```
 
-The car model's name is used as a key and it maps nicely. However, this is not always the case. There are some cases where the key is not always as easy to determine. 
+The car model's name is used as a key with no transformation needed. However, this is not always the case. Sometimes the key or index to use is not always easily determined.
 
 Here's an example with used cars:
 
- with varying years we need the following helper function to assign a key. 
+With a range of years, we need the following helper function to assign a key.
 
 ```javascript
 // Helper function
@@ -167,9 +167,9 @@ function getYearKey(carYear) {
 const usedPriusCarPriceLookUpTable = [5000,8250,11500]
 ```
 
-Used cars have varying years and it doesn't start at 0, which makes it very hard to use arrays. We can use a HashTable, with the year as keys. However, we would probably have to convert the years to strings. This doesn't sound quite right for me, so I prefer to use indexed table with a helper function. 
+Used cars have ranges of years and it doesn't start at 0, making it very hard to use with arrays. We can use a hash table, with the year as keys. However, we would probably have to convert the years to strings. This doesn't sound quite right for me, so I prefer to use an indexed table with a helper function.
 
-In the helper function above, we transformed the ranges of years to an index. Then we take this index and use it with an indexed table to determine the corresponding logic.
+In the helper function above, we transformed the ranges of years to an index. Then we take this index and use it to determine the corresponding logic.
 
 There are other approaches as well. Here's one, with a different take on the helper function:
 
@@ -181,8 +181,8 @@ function getYearKeyV2(carYear) {
 const usedPriusCarPriceLookUpTable = [5000, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 11500];
 ```
 
-Here we changed the way we keyed or index the table. Instead of using a conditional we used an expression to determine the index. As a result, we have to duplicate the values from 2000 - 2009 and subtract 1999 for it to work. Both works great and it really depends on the situations and your preferences.
+Here we changed the way we key or index the table. Instead of using a conditional we used an expression to determine the index. As a result, we have to duplicate the values from 2000 - 2009 and subtract 1999 for it to work. Each of the methods above works great and it truly depends on the situations and your preferences.
 
-Table-driven methods will take more space, but the gain in readability and maintability from less nested code is well worth the trade-off. The only challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows. 
+At the end of the day, table-driven methods do take more space, but the gain in readability and maintainability from less nested code is well worth the trade-off. The challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows.
 
 ### Polymorphic Functions
