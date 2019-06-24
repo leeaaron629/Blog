@@ -90,6 +90,8 @@ Well there it is! One line of code.
 I'm kidding, here's the rest of the code...
 
 ```javascript
+// Feel free to try this out in the browser
+
 // The magic!
 const carPriceLookupMap = {
     Toyata: {
@@ -126,5 +128,44 @@ const car = {
 console.log(carPriceLookupMap[car.make][car.model][getYearKey(car.year)]);
 ```
 
-Thi
-Feel free to try this out in your browser!
+Wow! Amazing right? Now let's take a look at how this work. The essence of the problem is classifying an object and applying the appropriate logic. So, why not store the appropriate logic in an indexed or key-value table, also known as a look-up table. The key will be the object's attribute. Here's a simpler version of above:
+
+```javascript
+const toyataCarModelPriceLookUpTable = {
+    Prius: 25000,
+    Corolla: 22000,
+    Avalon: 30000
+};
+
+let priusCarPrice = toyataCarModelPriceLookUpTable['Prius'];
+```
+
+As you can see, the car model's name is very easy to use as a key. However, this is not always the case. In the case of used cars with varying years we need the following helper function to assign a key. 
+
+```javascript
+// Helper function
+function getYearKey(carYear) {
+    if (carYear < 2000) {
+        return 0;
+    } else if (carYear < 2010) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
+const usedPriusCarPriceLookUpTable = [5000,8250,11500]
+```
+The array is used to hold the price of the used Prius and the helper function determines the index by the year. The tricky part of using a table-driven approach is figuring out how to key or index the table. Here's another approach:
+
+```javascript
+function getYearKeyV2(carYear) {
+    return Math.max(1999, Math.min(carYear, 2010)) - 1999;
+}
+
+const usedPriusCarPriceLookUpTable = [5000, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 11500];
+```
+
+Here we changed the way we keyed or index the table, or array. As a result we used an array with duplicate values instead. Both works great and it really depends on the situations and your preferences.
+
+Table-driven methods will take more space, but the gain in readability and maintability from less nesting and code is well worth the trade-off.
