@@ -1,4 +1,3 @@
-
 const CarModel = {
     CIVIC: "Civic",
     CR_V: "CR_V",
@@ -10,14 +9,25 @@ const CarModel = {
 
 const CarMake = {
     HONDA: "Honda",
-    TOYATA: "Toyata", 
+    TOYOTA: "Toyota", 
     FORD: "Ford"
 };
 
 class Car {
 
-    constructor(carMake) {
-        this.carMake = carMake;
+    constructor(make, model) {
+        this.make = make;
+        this.model = model;
+    }
+
+    contractForOwnership(terms) {
+        console.log('Unknown car found');
+        return null;
+    }
+    
+    contractForLease(terms) {
+        console.log('Unknown car found');
+        return null;
     }
 
     get milesFromTripA() {
@@ -30,32 +40,16 @@ class Car {
     
 }
 
-class HondaCar extends Car {
-
-    constructor() {
-        super(CarMake.HONDA);
-    }
+class CivicCar extends Car {
 
     get milesFromTripA() {
-        return "Honda Car Miles from Trip A";
+        return "Honda Civic Miles from Trip A";
     }
 
     get milesFromTripB() {
-        return "Honda Car Miles from Trip B";
+        return "Honda Civic Miles from Trip B";
     }
 
-
-}
-
-let carOne = new Car(CarMake.HONDA);
-
-let carTwo = new HondaCar();
-
-cars = [carOne, carTwo];
-
-for (let i = 0; i < cars.length; i++) {
-    console.log(cars[i].milesFromTripA);
-    console.log(cars[i].milesFromTripB);
 }
 
 class AccordCar extends Car {
@@ -87,6 +81,14 @@ class AccordCar extends Car {
         return contract;
     
     }
+
+    get milesFromTripA() {
+        return "Honda Accord Miles from Trip A";
+    }
+
+    get milesFromTripB() {
+        return "Honda Accord Miles from Trip B";
+    }
     
 }
 
@@ -114,7 +116,7 @@ function createCar(car) {
                 case CarModel.AVALON:
                     return new AvalonCar();
                 default:
-                    console.log('Unknown Toyata car model:', car.model);
+                    console.log('Unknown Toyota car model:', car.model);
                     return new Car();
             }
         default:
@@ -124,4 +126,19 @@ function createCar(car) {
 
 }
 
-createCar(car).contractForOwnership(terms);
+let civicCar = new Car(CarMake.HONDA, CarModel.CIVIC);
+let accordCar = new Car(CarMake.HONDA, CarModel.ACCORD);
+
+cars = [civicCar, accordCar];
+
+for (let i = 0; i < cars.length; i++) {
+    console.log(cars[i].milesFromTripA);
+    console.log(cars[i].milesFromTripB);
+}
+
+cars.map((car) => createCar(car)).forEach((car) => {
+    console.log(car.milesFromTripA);
+    console.log(car.milesFromTripB);
+});
+
+// createCar(accordCar).contractForOwnership(terms);
