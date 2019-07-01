@@ -3,13 +3,13 @@ const CIVIC = "Civic";
 const CR_V = "CR_V";
 const ACCORD = "Accord";
 
-const TOYATA = "Toyata";
+const TOYOTA = "Toyota";
 const PRIUS = "Prius";
 const COROLLA = "Corolla";
 const AVALON = "Avalon";
 
 const carPriceLookupMap = {
-    Toyata: {
+    Toyota: {
         Prius: [5000,8250,11500],
         Corolla: [4500, 8000, 10500],
         Avalon: [6000, 9000, 12500]
@@ -28,7 +28,7 @@ const car1 = {
 }
 
 const car2 = {
-    make: TOYATA,
+    make: TOYOTA,
     model: AVALON,
     year: 2010
 }
@@ -38,7 +38,7 @@ function getYearKeyV2(carYear) {
 }
 
 const carPriceLookupMapV2 = {
-    Toyata: {
+    Toyota: {
         Prius: {
             1999: 5000,
             2000: 8250,
@@ -183,7 +183,7 @@ function getCarPrice(car) {
                     console.log('Invalid car model:', model);
                     return 0;
             }
-        case TOYATA:
+        case TOYOTA:
             switch(car.model) {
                 case PRIUS:
                     if (car.year < 2000) {
