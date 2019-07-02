@@ -1,12 +1,12 @@
 # Dealing with Deep Nested Code (Part 2)
 
-Hi! Welcome to part 2 of Dealing with Deep Nested Code. In part 1, we went over some methods on keeping nesting to a minimum by simply re-structuring the code through guard clauses and method decomposition. However, we still ended up using conditionals. Today we will go over approaches that do not use conditionals at all. This way we are avoiding conditionals instead of moving it elsewhere.
+Hi! Welcome to part 2 of Dealing with Deep Nested Code. In part 1, we went over some methods on keeping nesting to a minimum by merely re-structuring the code. However, we still ended up using conditionals. Today we will go over approaches that do not use conditionals at all. This way, we will have no nesting inside our core logic.
 
 ### Table-Driven Methods
 
-Table-driven methods, as the name suggests, uses indexed tables (Arrays) and HashTables (Maps) as look-up tables.
+Table-driven methods, as the name suggests, use indexed tables (Arrays) and hash tables (HashMaps) as look-up tables to store the appropriate value or logic. The conditions, usually the object's properties, determines the keys or indices to the look-up table. So at run-time, the suitable logic or value can be found on the look-up table.
 
-Let's take a look at the following code to see what it can do:
+Let's take a look at the following code to see what table-driven methods are and can do:
 
 ```javascript
 function getCarPrice(car) {
@@ -81,7 +81,7 @@ function getCarPrice(car) {
 }
 ```
 
-What a mess right? Now imagine doing all of that in one line of code. Impossible right?
+What a mess, right? Now imagine doing all of that in one line of code. Impossible right?
 
 ```javascript
 carPriceLookupMap[car1.make][car1.model][getYearKey(car1.year)];
@@ -89,7 +89,7 @@ carPriceLookupMap[car1.make][car1.model][getYearKey(car1.year)];
 
 Well, there it is! One line of code.
 
-I'm kidding, here's the rest of the code...
+I'm kidding, here's the rest of the code:
 
 ```javascript
 // Feel free to try this out in the browser
@@ -130,9 +130,9 @@ const car = {
 console.log(carPriceLookUpTable[car.make][car.model][getYearKey(car.year)]);
 ```
 
-Not exactly a one-liner, but the intention and logic are much more clear than the first. Let's take an in-depth look at how this works.
+Not exactly a one-liner, but the intention and logic are much more apparent than the first. Let's take an in-depth look at how this works.
 
-The essence of this problem is classifying an object and applying the corresponding logic to it. So, in a look-up table, we use properties of the object as keys and indices. By doing this, the correct logic can be stored with its corresponding indices. During, run-time we find the appropriate logic through the object's properties.
+The essence of this problem is classifying an object and applying the corresponding logic to it. So, in the look-up table, we use the car's properties as keys and indices. By doing this, we can easily find the correct value on the look-up table, during run-time.
 
 Here's a simpler version of the above example:
 
@@ -146,9 +146,9 @@ const toyataCarModelPriceLookUpTable = {
 let priusCarPrice = toyataCarModelPriceLookUpTable['Prius'];
 ```
 
-The car model's name is used as a key with no transformation needed. However, this is not always the case. Sometimes the key or index to use is not always easily determined.
+We used the car's model name as a key without any transformation. However, this is not always the case. Sometimes the key or index to use is not easily determined.
 
-Here's an example with used cars:
+Here's a more complicated example with used cars:
 
 With a range of years, we need the following helper function to assign a key.
 
@@ -167,11 +167,11 @@ function getYearKey(carYear) {
 const usedPriusCarPriceLookUpTable = [5000,8250,11500]
 ```
 
-Used cars have ranges of years and it doesn't start at 0, making it very hard to use with arrays. We can use a hash table, with the year as keys. However, we would probably have to convert the years to strings. This doesn't sound quite right for me, so I prefer to use an indexed table with a helper function.
+Used cars have many ranges of years, and it doesn't start at 0, which makes it very difficult to use with arrays. We can use a hash table, with the year as keys. However, we would probably have to convert the years to strings. It doesn't sound quite right for me, so I decided to use an indexed table with a helper function.
 
 In the helper function above, we transformed the ranges of years to an index. Then we take this index and use it to determine the corresponding logic.
 
-There are other approaches as well. Here's one, with a different take on the helper function:
+There are other approaches. Here's one, with a different take on the helper function:
 
 ```javascript
 function getYearKeyV2(carYear) {
@@ -181,9 +181,9 @@ function getYearKeyV2(carYear) {
 const usedPriusCarPriceLookUpTable = [5000, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 11500];
 ```
 
-Here we changed the way we key or index the table. Instead of using a conditional we used an expression to determine the index. As a result, we have to duplicate the values from 2000 - 2009 and subtract 1999 for it to work. Each of the methods above works great and it truly depends on the situations and your preferences.
+Here we changed the way we key or index the table. We used an expression to determine the index, which results in values between 1999-2010, inclusive. As a result, we have to duplicate values from 2000 - 2009 and subtract 1999 for it to work. Both of these methods work excellently, and it truly depends on your situations and preferences.
 
-At the end of the day, table-driven methods do take more space, but the gain in readability and maintainability is well worth the trade-off. The challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows.
+In general, table-driven methods do take more space, but the gain in readability and maintainability is well worth the trade-off. The biggest challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows.
 
 ### Polymorphic Functions
 
