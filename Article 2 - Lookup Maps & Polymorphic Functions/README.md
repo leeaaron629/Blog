@@ -183,6 +183,134 @@ const usedPriusCarPriceLookUpTable = [5000, 8250, 8250, 8250, 8250, 8250, 8250, 
 
 Here we changed the way we key or index the table. Instead of using a conditional we used an expression to determine the index. As a result, we have to duplicate the values from 2000 - 2009 and subtract 1999 for it to work. Each of the methods above works great and it truly depends on the situations and your preferences.
 
-At the end of the day, table-driven methods do take more space, but the gain in readability and maintainability from less nested code is well worth the trade-off. The challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows.
+At the end of the day, table-driven methods do take more space, but the gain in readability and maintainability is well worth the trade-off. The challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows.
 
 ### Polymorphic Functions
+
+Let's take a look at a more complicated example, where we are doing more than returning a value. (Adding a depedency as a field and 
+returning an actual object).
+
+```javascript
+
+function contractForOwnership(car, termsWithCustomer) {
+
+    let contract = new Contract();
+
+    switch (car.make) {
+        case CarMake.HONDA:
+            switch (car.model) {
+                case CarModel.CIVIC:
+                    contract.initialPrice = car.msrp - termsWithCustomer.discount;
+                    contract.description
+                    // More code to modify contract ...
+                    break;
+                case CarModel.CR_V:
+                    // Code to modify contract ...
+                    break;
+                case CarModel.ACCORD:
+                    // Code to modify contract ...
+                    break;
+                default:
+                    console.log('Unknown Honda car model: ', car.model);
+            }
+            break;
+        case CarMake.TOYOTA:
+            switch (car.model) {
+                case CarModel.PRIUS:
+                    // Code to modify contract ...
+                    break;
+                case CarModel.COROLLA:
+                    // Code to modify contract ...
+                    break;
+                case CarModel.AVALON:
+                    // Code to modify contract ...
+                    break;
+                default:
+                    console.log('Unknown Toyota car model:', car.model);
+            }
+            break;
+        default:
+            console.log('Unknown car make:', car.make);
+    }
+
+    return contract;
+
+}
+
+function contractForLease(car, termsWithCustomer) {
+    // Return a lease contract depending on the model and make of the car 
+}
+```
+
+Here we are returning a Contract object that contains all the details of the sale, including the initial price. One way to handle it is to initialize a look-up map to the corresponding functions. However, I find polymorphic functions more appropriate here.
+
+Here's the above with polymorphic functions:
+
+```javascript
+class AccordCar extends Car {
+
+    contractForOwnerShip(termsWithCustomer) {
+
+    }
+
+    contractForLease(termsWithCustomer) {
+
+    }    
+
+}
+
+class CivicCar extends Car {
+
+    contractForOwnerShip(termsWithCustomer) {
+
+    }
+
+    contractForLease(termsWithCustomer) {
+
+    }      
+
+}
+
+function createCar(car) {
+
+    switch (car.make) {
+        case CarMake.HONDA:
+            switch (car.model) {
+                case CarModel.CIVIC:
+                    return new CivicCar();
+                case CarModel.CR_V:
+                    return new CrvCar();
+                case CarModel.ACCORD:
+                    return new AccordCar();
+                default:
+                    console.log('Unknown Honda car model: ', car.model);
+                    return new Car();
+            }
+        case CarMake.TOYOTA:
+            switch (car.model) {
+                case CarModel.PRIUS:
+                    return new PriusCar();
+                case CarModel.COROLLA:
+                    return new CorollaCar();
+                case CarModel.AVALON:
+                    return new AvalonCar();
+                default:
+                    console.log('Unknown Toyota car model:', car.model);
+                    return new Car();
+            }
+        default:
+            console.log('Unknown car make:', car.make);
+            return new Car();
+    }
+
+}
+
+function getLeaseContractForCar(car) {
+    return createCar(car).contractForLease;
+}
+
+function getLeaseContractsForCars(cars) {
+    return cars.map((car) => createCar(car)).map((car) => car.contractForLease());
+}
+
+```

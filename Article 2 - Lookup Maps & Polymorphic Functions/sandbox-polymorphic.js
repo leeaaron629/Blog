@@ -37,6 +37,10 @@ class Car {
     get milesFromTripB() {
         return "Car Miles from Trip B";
     }
+
+    funcWithDependency(str) {
+        console.log('Logging: Not implemented');
+    }
     
 }
 
@@ -48,6 +52,10 @@ class CivicCar extends Car {
 
     get milesFromTripB() {
         return "Honda Civic Miles from Trip B";
+    }
+
+    funcWithDependency(str) {
+        console.log('Logging:', str);
     }
 
 }
@@ -89,6 +97,10 @@ class AccordCar extends Car {
     get milesFromTripB() {
         return "Honda Accord Miles from Trip B";
     }
+
+    funcWithDependency(str) {
+        console.log('Logging:', str);
+    }
     
 }
 
@@ -98,11 +110,11 @@ function createCar(car) {
         case CarMake.HONDA:
             switch (car.model) {
                 case CarModel.CIVIC:
-                        return new CivicCar();
+                    return new CivicCar();
                 case CarModel.CR_V:
-                        return new CrvCar();
+                    return new CrvCar();
                 case CarModel.ACCORD:
-                        return new AccordCar();
+                    return new AccordCar();
                 default:
                     console.log('Unknown Honda car model: ', car.model);
                     return new Car();
@@ -140,5 +152,13 @@ cars.map((car) => createCar(car)).forEach((car) => {
     console.log(car.milesFromTripA);
     console.log(car.milesFromTripB);
 });
+
+cars.map((car) => createCar(car)).forEach((car) => {
+    if (car instanceof CivicCar) {
+        car.funcWithDependency("Honda Car");
+    } else if (car instanceof AccordCar) {
+        car.funcWithDependency("Accord Car");
+    }
+})
 
 // createCar(accordCar).contractForOwnership(terms);
