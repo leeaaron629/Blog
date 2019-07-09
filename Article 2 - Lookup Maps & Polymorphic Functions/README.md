@@ -187,10 +187,11 @@ In general, table-driven methods do take more space, but the gain in readability
 
 ### Polymorphic Functions
 
-Let's take a look at a more complicated example, where we are doing more than returning a value. (Adding a depedency as a field and 
-returning an actual object).
+Finally, we have polymorphic functions for the scenarios where table-driven methods aren't enough. Polymorphic functions, as the name suggests, will morph according to your needs, making it a very suitable approach for dealing with conditional logic.
 
-Let's look at an example where we create a contract to keep as a record for both parties. The contract created depends on the type of car, the dealership, and the terms discussed with the customer. This is the code with regular switch statements.
+Let's look at an example where we create a contract to keep as a record for both parties. The contract created depends on the type of car, dealership, and terms discussed with the customer.
+
+Here is the code with regular switch statements:
 
 ```javascript
 
@@ -251,13 +252,9 @@ function termToContractForLease(car, termsWithCustomer) {
 }
 ```
 
-As you can see it can get messy very quick. It is common to not use polymoprhic function at first, where a simple enum property is sufficient. However, when more complexity is required we should start considering polymorph functions. There is even more reason, if we see the same set of switch statements in differnet parts of our code. 
+As you can see, it can get messy very quickly. The initial approach is correct not to use inheritance when a simple property with enum is sufficient. However, as the logic gets more complicated, we should start considering polymorphic functions. 
 
-When using polymorphic functions, it is not necessary to use fit everything inside the sub-type. We can have it specifically for creating contracts.
-
-Here we are returning a Contract object that contains all the details of the sale, including the initial price. One way to handle it is to initialize a look-up map to the corresponding functions. However, I find polymorphic functions more appropriate here.
-
-Here's the above with polymorphic functions:
+Here's the above code with polymorphic functions:
 
 ```javascript
 class AccordCar extends Car {
@@ -345,5 +342,8 @@ function getLeaseContractForCar(car) {
 function getLeaseContractsForCars(cars) {
     return cars.map((car) => createCar(car)).map((car) => car.contractForLease());
 }
-
 ```
+
+The complexity is abstracted out into its respective classes and the classification in a factory method. Once classified, we can get the contract of the terms and car with a  single line of code. This code with polymorphic functions is much more straightforward and organized than the previous one.
+
+Using polymorphic functions comes with the extra baggage of new classes. Inheritance, as well, can lead to complex code. So, we should use it sparingly. However, in this case, the complexity within our switch statements is getting out of hand. We welcome the new classes because it reduces the overall complexity. Also, if we see the same set of switch statements in other places as well, there is even more reason to consider polymorphic functions. Use polymorphic functions to reduce overall complexity.
