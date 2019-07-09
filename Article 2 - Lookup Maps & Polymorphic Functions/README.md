@@ -190,9 +190,11 @@ In general, table-driven methods do take more space, but the gain in readability
 Let's take a look at a more complicated example, where we are doing more than returning a value. (Adding a depedency as a field and 
 returning an actual object).
 
+Let's look at an example where we create a contract to keep as a record for both parties. The contract created depends on the type of car, the dealership, and the terms discussed with the customer. This is the code with regular switch statements.
+
 ```javascript
 
-function contractForOwnership(car, termsWithCustomer) {
+function termToContractForOwnership(car, termsWithCustomer) {
 
     let contract = new Contract();
 
@@ -200,8 +202,15 @@ function contractForOwnership(car, termsWithCustomer) {
         case CarMake.HONDA:
             switch (car.model) {
                 case CarModel.CIVIC:
-                    contract.initialPrice = car.msrp - termsWithCustomer.discount;
-                    contract.description
+
+                    contract.initialPrice = (car.msrp - termsWithCustomer.discount) * Dealership.CIVIC_DISCOUNT
+
+                    if (termsWithCustomer.premiumWarrnty > 0) {
+                        contract.premuiumWarranty = termsWithCustomer.premiumWarranty;
+                        contract.initialPrice += termsWithCustomer.premiumWarranty * Dealership.CIVIC_PREMIUM_WARRANTY
+                    } else {
+                        contract.warranty = car.warranty;
+                    }
                     // More code to modify contract ...
                     break;
                 case CarModel.CR_V:
@@ -237,10 +246,14 @@ function contractForOwnership(car, termsWithCustomer) {
 
 }
 
-function contractForLease(car, termsWithCustomer) {
+function termToContractForLease(car, termsWithCustomer) {
     // Return a lease contract depending on the model and make of the car 
 }
 ```
+
+As you can see it can get messy very quick. It is common to not use polymoprhic function at first, where a simple enum property is sufficient. However, when more complexity is required we should start considering polymorph functions. There is even more reason, if we see the same set of switch statements in differnet parts of our code. 
+
+When using polymorphic functions, it is not necessary to use fit everything inside the sub-type. We can have it specifically for creating contracts.
 
 Here we are returning a Contract object that contains all the details of the sale, including the initial price. One way to handle it is to initialize a look-up map to the corresponding functions. However, I find polymorphic functions more appropriate here.
 
@@ -249,11 +262,18 @@ Here's the above with polymorphic functions:
 ```javascript
 class AccordCar extends Car {
 
-    contractForOwnerShip(termsWithCustomer) {
+    termToContractForOwnership(termsWithCustomer) {
+
+        let contract = initAccordContract();
+
+        contract.initialPrice = (car.msrp - termsWithCustomer.discount) * Dealership.ACCORD_DISCOUNT;
+        contract.warranty = car.warranty;
+        
+        return contract;
 
     }
 
-    contractForLease(termsWithCustomer) {
+    termToContractForLease(termsWithCustomer) {
 
     }    
 
@@ -261,11 +281,24 @@ class AccordCar extends Car {
 
 class CivicCar extends Car {
 
-    contractForOwnerShip(termsWithCustomer) {
+    termToContractForOwnership(termsWithCustomer) {
+
+        let contract = initCivicContract();
+
+        contract.initialPrice = (car.msrp - termsWithCustomer.discount) * Dealership.CIVIC_DISCOUNT;
+
+        if (termsWithCustomer.premiumWarrnty > 0) {
+            contract.premuiumWarranty = termsWithCustomer.premiumWarranty;
+            contract.initialPrice += termsWithCustomer.premiumWarranty * Dealership.CIVIC_PREMIUM_WARRANTY;
+        } else {
+            contract.warranty = car.warranty;
+        }
+
+        return contract;
 
     }
 
-    contractForLease(termsWithCustomer) {
+    termToContractForLease(termsWithCustomer) {
 
     }      
 
