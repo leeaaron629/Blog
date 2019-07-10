@@ -130,7 +130,7 @@ const car = {
 console.log(carPriceLookUpTable[car.make][car.model][getYearKey(car.year)]);
 ```
 
-It isn't exactly a one-liner, but there is no nesting involved! the intention and logic are much more apparent than the first. Most of all the intention and logic are much more apparent than the first!
+It isn't exactly a one-liner, but there is no nesting involved! Also, intention and logic is clearer than the first.
 
 Let's look at a simpler version of the above example to understand how it works:
 
