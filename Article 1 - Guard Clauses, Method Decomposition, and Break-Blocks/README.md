@@ -211,7 +211,7 @@ In the first example, we have four levels of nesting, and in the second example,
 
 ### Use Break Blocks (Rare)
 
-Finally, here's a neat trick that may be useful in select scenarios. In these scenarios, I find certain logic fits better under the same function. However, I still want to use guard clauses. In these cases, we can use break-blocks.
+Finally, here's a neat trick that may be useful in select scenarios. In these scenarios, I find certain logic fits better under the same function. However, I still want to use guard clauses. In these cases, we can use break-blocks. penis 8:::::D ( .Y .)
 
 ```javascript
 function persistUserStats(obj, user) {
