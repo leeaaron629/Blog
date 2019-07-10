@@ -1,10 +1,10 @@
 # Dealing with Deep Nested Code (Part 2)
 
-Hi! Welcome to part 2 of Dealing with Deep Nested Code. In part 1, we went over some methods on keeping nesting to a minimum by re-structuring the code. However, we still ended up using conditionals. Today we will go over approaches that do not use conditionals at all. This way, we can truly avoid nesting inside our core logic.
+Hi! Welcome to part 2 of Dealing with Deep Nested Code. In part 1, we went over some techniques on keeping nesting to a minimum by re-structuring the code. However, we still ended up with nesting. Today we will go over approaches that do not use if-else and switch statements. This way, we can truly avoid nesting inside our core logic.
 
 ### Table-Driven Methods
 
-Table-driven methods, as the name suggests, use indexed tables (Arrays) and hash tables (HashMaps) as look-up tables to store the appropriate value or logic. The conditions are the keys and indices of the look-up table. So at run-time, the suitable logic or value can be found on the look-up table.
+Table-driven methods, as the name suggests, use indexed tables (Arrays) and hash tables (HashMaps) as look-up tables to store the appropriate value or logic. The result of the conditions serves as keys and indices of the look-up table. So at run-time, the suitable logic or value can be found on the look-up table.
 
 Let's take a look at the following code to see what table-driven methods are and can do:
 
@@ -81,7 +81,7 @@ function getCarPrice(car) {
 }
 ```
 
-What a mess, right? Now imagine doing all of that in one line of code. Impossible right?
+What a mess, right? Now imagine doing all of that in one line of code. Impossible!
 
 ```javascript
 carPriceLookupMap[car1.make][car1.model][getYearKey(car1.year)];
@@ -130,11 +130,9 @@ const car = {
 console.log(carPriceLookUpTable[car.make][car.model][getYearKey(car.year)]);
 ```
 
-Not exactly a one-liner, but the intention and logic are much more apparent than the first. Let's take an in-depth look at how this works.
+It isn't exactly a one-liner, but there is no nesting involved! the intention and logic are much more apparent than the first. Most of all the intention and logic are much more apparent than the first!
 
-The essence of this problem is classifying an object and applying the corresponding logic to it. So, in the look-up table, we use the car's properties as keys and indices. By doing this, we store the value or logic in a table instead of a decision tree, a bunch of nested if-else or switch statements. During run-time, we can easily find the correct value on the look-up table.
-
-Here's a simpler version of the above example:
+Let's look at a simpler version of the above example to understand how it works:
 
 ```javascript
 const toyataCarModelPriceLookUpTable = {
@@ -146,7 +144,7 @@ const toyataCarModelPriceLookUpTable = {
 let priusCarPrice = toyataCarModelPriceLookUpTable['Prius'];
 ```
 
-We used the car's model name as a key without any transformation. However, this is not always the case. Sometimes the key or index to use is not easily determined.
+We used the car's model name as a key. No transformation was necessary, but, this is not always the case. Sometimes the property is not suitable as a key or index and has to undergo some change.
 
 Here's a more complicated example with used cars:
 
@@ -165,11 +163,11 @@ function getYearKey(carYear) {
 const usedPriusCarPriceLookUpTable = [5000,8250,11500]
 ```
 
-Used cars have ranges of years, and it doesn't start at 0, which makes it very difficult to use with arrays. We can use a hash table, with the year as keys. However, we would probably have to convert the years to strings. It doesn't sound quite right for me, so I decided to use an indexed table with a helper function.
+Used cars have ranges of years, and it doesn't start at 0. These ranges make it very difficult to use with arrays. We can use a hash table, with the year as keys, but we would have to duplicate years from 2000 - 2009. It doesn't sound quite right for me, so I decided to use an indexed table with a helper function.
 
-In the helper function above, we transformed the ranges of years to an index. Then we take this index and use it to determine the corresponding logic.
+In the helper function above, we transformed the ranges of years to a more suitable value. Then we take this value and use it as an index to determine the corresponding value.
 
-There are other approaches. Here's one, with a different take on the helper function:
+There are other approaches, as well. Here's a one-liner, with duplicated years and modified to use with an indexed table:
 
 ```javascript
 function getYearKeyV2(carYear) {
@@ -179,15 +177,15 @@ function getYearKeyV2(carYear) {
 const usedPriusCarPriceLookUpTable = [5000, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 8250, 11500];
 ```
 
-Here we changed the way we key or index the table. We used an expression to determine the index, which results in values between 1999-2010, inclusive. As a result, we have to duplicate values from 2000 - 2009 and subtract 1999 for it to work. Both of these methods work excellently, and it truly depends on your situations and preferences.
+We used an expression to determine the index, which results in values between 1999-2010. Then, we subtract 1999 to make it work with an array. The 0th index will hold values for years below 2000. The 11th index will hold values for years above 2010. For index 1 - 10 (2000 - 2010) we will have to duplicate the values. Both of these methods works, and it truly depends on your situations and preferences.
 
 In general, table-driven methods do take more space, but the gain in readability and maintainability is well worth the trade-off. The biggest challenge that comes with table-driven methods is figuring out how to key or index the table. Not every case is simple, but once figured out the rest follows.
 
 ### Polymorphic Functions
 
-Finally, we have polymorphic functions for the scenarios where table-driven methods aren't enough. Polymorphic functions, as the name suggests, will morph according to your needs, making it a very suitable approach for dealing with conditional logic.
+Lastly, we have polymorphic functions for the scenarios where table-driven methods aren't enough. Polymorphic functions, as the name suggests, will morph according to your needs, making it a very suitable approach for dealing with complex conditional logic.
 
-Let's look at an example where we create a contract to keep as a record for both parties. The contract created depends on the type of car, dealership, and terms discussed with the customer.
+Let's look at an example where we create a contract to keep as a record for both parties when buying a car from a dealership. The contract created depends on the car, dealership, and terms discussed with the customer. 
 
 Here is the code with regular switch statements:
 
@@ -249,8 +247,7 @@ function termToContractForLease(car, termsWithCustomer) {
     // Return a lease contract depending on the model and make of the car 
 }
 ```
-
-As you can see, it can get messy very quickly. The initial approach is correct not to use inheritance when a simple property with enum is sufficient. However, as the logic gets more complicated, we should start considering polymorphic functions. 
+As you can see, it can get messy very quickly. The initial approach is correct not to use inheritance when a simple property with enum is sufficient. However, as requirements keep coming in and the logic gets more complicated, it is time to consider polymorphic functions.
 
 Here's the above code with polymorphic functions:
 
@@ -269,7 +266,7 @@ class AccordCar extends Car {
     }
 
     termToContractForLease(termsWithCustomer) {
-
+        // Complex code to create a lease, specific to Accords
     }    
 
 }
@@ -294,7 +291,7 @@ class CivicCar extends Car {
     }
 
     termToContractForLease(termsWithCustomer) {
-
+        // Complex code to create a lease, specific to Civics
     }      
 
 }
@@ -342,8 +339,8 @@ function getLeaseContractsForCars(cars) {
 }
 ```
 
-The complexity is abstracted out into its respective classes and the classification in a factory method. Once classified, we can get the contract of the terms and car with a  single line of code. This code with polymorphic functions is much more straightforward and organized than the previous one.
+The code is not shorter, but it is much more straightforward and organized. We abstracted out the complexity into its respective class and the classification in a factory method. As a result, the primary logic is only a single line of code. Overall, it is slightly more verbose. However, with switch statements elsewhere and the complex logic organized in its respective class, it is easier to reason with, read, and maintain.
 
-Using polymorphic functions comes with the extra baggage of new classes. Inheritance, as well, can lead to complex code. So, we should use it sparingly. However, in this case, the complexity within our switch statements is getting out of hand. We welcome the new classes because it reduces the overall complexity. Also, if we see the same set of switch statements in other places as well, there is even more reason to consider polymorphic functions. Use polymorphic functions to reduce overall complexity.
+Using polymorphic functions does come with extra baggage. There are new classes to consider, and inheritance can lead to complex code. We should use it accordingly. However, in this case, the complexity within our switch statements is getting out of hand. So, we welcome the new classes because it reduces the overall complexity. Also, if we see the same set of switch statements elsewhere, there is even more reason to consider polymorphic functions. Use polymorphic functions to reduce overall complexity, not to increase it.
 
-Well, that's it! With this, I hope to see less nesting in code when dealing with complex conditional logic. Use table-driven methods, when simple values can be stored. Use polymorphic functions, when logic within is getting out of hand. Use these techniques appropriately and avoid over-use.
+Well, that's it! With these techniques, I hope you can turn some nasty switch-statements into look-up tables or add more structure with polymorphic functions. As always, do not misuse these techniques. Use them accordingly.
