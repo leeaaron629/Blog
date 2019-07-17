@@ -193,7 +193,7 @@ Here is the code with regular switch statements:
 
 function termToContractForOwnership(car, termsWithCustomer) {
 
-    let contract = new Contract();
+    const contract = new Contract();
 
     switch (car.make) {
         case CarMake.HONDA:
@@ -256,7 +256,7 @@ class AccordCar extends Car {
 
     termToContractForOwnership(termsWithCustomer) {
 
-        let contract = initAccordContract();
+        const contract = initAccordContract();
 
         contract.initialPrice = (car.msrp - termsWithCustomer.discount) * Dealership.ACCORD_DISCOUNT;
         contract.warranty = car.warranty;
@@ -275,7 +275,7 @@ class CivicCar extends Car {
 
     termToContractForOwnership(termsWithCustomer) {
 
-        let contract = initCivicContract();
+        const contract = initCivicContract();
 
         contract.initialPrice = (car.msrp - termsWithCustomer.discount) * Dealership.CIVIC_DISCOUNT;
 
@@ -344,3 +344,40 @@ The code is not shorter, but it is much more straightforward and organized. We a
 Using polymorphic functions does come with extra baggage. There are new classes to consider, and inheritance can lead to complex code. We should use it accordingly. However, in this case, the complexity within our switch statements is getting out of hand. So, we welcome the new classes because it reduces the overall complexity. Also, if we see the same set of switch statements elsewhere, there is even more reason to consider polymorphic functions. Use polymorphic functions to reduce overall complexity, not to increase it.
 
 Well, that's it! With these techniques, I hope you can turn some nasty switch-statements into look-up tables or add more structure with polymorphic functions. As always, do not misuse these techniques. Use them accordingly.
+
+------------------------------------------------------------
+
+To reduce the nesting in the createCar function, we can instead use an object mapping of the car make and model with the appropriate constructor function.
+
+Also, taking a few points straight out of your first article, we can use guard clauses to return from the function early when either car make or car model isn't found.
+
+```js
+function createCar({ make, model }) {
+    const carConstructorMapping = {
+        [CarMake.HONDA]: {
+            [CarModel.CIVIC]: CivicCar,
+            [CarModel.CR_V]: CrvCar,
+            [CarModel.ACCORD]: AccordCar
+        },
+        [CarMake.TOYOTA]: {
+            [CarModel.PRIUS]: PriusCar,
+            [CarModel.COROLLA]: CorollaCar,
+            [CarModel.AVALON]: AvalonCar
+        }
+    };
+
+    if (!carConstructorMapping[make]) {
+        console.log('Unknown car make:', make);
+        return new Car();
+    }
+
+    const SelectedCar = carConstructorMapping[make][model];
+
+    if (!SelectedCar) {
+        console.log(`Unknown ${make} car model:`, model);
+        return new Car();
+    }
+
+    return new SelectedCar();
+}
+```

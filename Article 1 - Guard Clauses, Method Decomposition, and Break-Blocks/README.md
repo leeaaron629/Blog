@@ -43,19 +43,18 @@ function printNextNode(node) {
 ```
 Which one did you like more? Hopefully, you prefer the second one because I did. I prefer the second one for 3 primary reasons:
 
-1. The primary logic is not nested at all, making it very easy to read. <br />
-2. You do not have to look further down than the return statement <br />
+1. The primary logic is not nested at all, making it very easy to read
+2. You do not have to look further down than the return statement
 3. It clearly shows the author's intentions
-<br />
  
-Code without nesting is easier to read than any nesting. I'm sure we can all agree to that. Also, the guard clause clearly shows the function returns when it is NULL.  As a result, we do not have to consider NULLs when reading further. In the first example, you're left wondering... "Okay, this is the non-NULL case. The NULL case should be at the bottom..." as you read. By having more to juggle in mind, it will be much harder for the reader to focus and absorb the primary logic. Intentions are much clearer in the second function.
+Code without nesting is easier to read than with nesting. I'm sure we can all agree to that. Also, the guard clause clearly shows the function returns when it is NULL.  As a result, we do not have to consider NULLs when reading further. In the first example, you're left wondering... "Okay, this is the non-NULL case. The NULL case should be at the bottom..." as you read. By having more to juggle in mind, it will be much harder for the reader to focus and absorb the primary logic. Intentions are much clearer in the second function.
 
 The first function says: "If the node exists, print!"
 The second function says: "Print node!"
 
 Be careful when using guard clauses. The two functions below are not equivalent. 
 
-Before reading further, imagine the follow made-up functions I used below are actually 10-20 lines of code, and it is not possible to decompose them into smaller functions.
+Before reading further, imagine the following made-up functions I used below are actually 10-20 lines of code, and it is not possible to decompose them into smaller functions.
 
 ```javascript
 function withDeepNestedConditions(obj) {
