@@ -252,6 +252,12 @@ As you can see, it can get messy very quickly. The initial approach is correct n
 Here's the above code with polymorphic functions:
 
 ```javascript
+class Car {
+    constructor(car) {
+        Object.assign(this,)
+    }
+}
+
 class AccordCar extends Car {
 
     termToContractForOwnership(termsWithCustomer) {
@@ -302,30 +308,30 @@ function createCar(car) {
         case CarMake.HONDA:
             switch (car.model) {
                 case CarModel.CIVIC:
-                    return new CivicCar();
+                    return new CivicCar(car);
                 case CarModel.CR_V:
-                    return new CrvCar();
+                    return new CrvCar(car);
                 case CarModel.ACCORD:
-                    return new AccordCar();
+                    return new AccordCar(car);
                 default:
                     console.log('Unknown Honda car model: ', car.model);
-                    return new Car();
+                    return car;
             }
         case CarMake.TOYOTA:
             switch (car.model) {
                 case CarModel.PRIUS:
-                    return new PriusCar();
+                    return new PriusCar(car);
                 case CarModel.COROLLA:
-                    return new CorollaCar();
+                    return new CorollaCar(car);
                 case CarModel.AVALON:
-                    return new AvalonCar();
+                    return new AvalonCar(car);
                 default:
                     console.log('Unknown Toyota car model:', car.model);
-                    return new Car();
+                    return car;
             }
         default:
             console.log('Unknown car make:', car.make);
-            return new Car();
+            return car;
     }
 
 }
